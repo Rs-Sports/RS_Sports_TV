@@ -112,82 +112,83 @@
   <main class="max-w-5xl mx-auto px-4 space-y-10 mt-6">
 
     
-<!-- 40:21 Aspect Ratio Slider -->
-<section class="relative overflow-hidden rounded-lg mb-8 max-w-6xl mx-auto border border-blue-600 shadow-lg">
+
+<!-- Natok Slider with 40:21 Ratio -->
+<section class="relative overflow-hidden rounded-lg mb-8 max-w-6xl mx-auto border border-green-600 shadow-lg">
   <div class="relative aspect-[40/21]">
-    <div id="slider-40by21" class="w-full h-full overflow-hidden rounded-md relative">
-      <img id="slider-40by21-img" src="https://i.imgur.com/ucBGTqE.jpeg" 
+    <div id="natok-slider" class="w-full h-full overflow-hidden rounded-md relative">
+      <img id="natok-slider-img" src="https://i.imgur.com/ucBGTqE.jpeg" 
            class="w-full h-full object-cover transition-opacity duration-700 rounded-md">
 
       <!-- Navigation Arrows -->
-      <button id="slider-40by21-prev" class="absolute left-2 top-1/2 -translate-y-1/2 bg-black/50 text-white px-2 py-1 rounded-full hover:bg-white hover:text-black transition">
+      <button id="natok-slider-prev" class="absolute left-2 top-1/2 -translate-y-1/2 bg-black/50 text-white px-2 py-1 rounded-full hover:bg-white hover:text-black transition">
         &#10094;
       </button>
-      <button id="slider-40by21-next" class="absolute right-2 top-1/2 -translate-y-1/2 bg-black/50 text-white px-2 py-1 rounded-full hover:bg-white hover:text-black transition">
+      <button id="natok-slider-next" class="absolute right-2 top-1/2 -translate-y-1/2 bg-black/50 text-white px-2 py-1 rounded-full hover:bg-white hover:text-black transition">
         &#10095;
       </button>
     </div>
 
     <!-- Dots -->
-    <div class="flex justify-center gap-2 mt-2" id="slider-40by21-dots"></div>
+    <div class="flex justify-center gap-2 mt-2" id="natok-slider-dots"></div>
   </div>
 </section>
 
 <script>
-  const images40by21 = [
-    "https://imgur.com/OWYSwqC.jpeg",
-    "https://imgur.com/KBtBjPt.jpeg",
+  const natokImages = [
+    "https://i.imgur.com/ucBGTqE.jpeg",
+    "https://i.imgur.com/QJBVw1y.jpeg",
     "https://i.imgur.com/wSmauZ2.jpg",
     "https://i.imgur.com/yxqTfER.jpg",
     "https://i.imgur.com/NcnmUay.jpg"
   ];
 
-  let current40by21 = 0;
-  const img40by21 = document.getElementById("slider-40by21-img");
-  const dotsContainer40by21 = document.getElementById("slider-40by21-dots");
+  let natokCurrent = 0;
+  const natokSliderImg = document.getElementById("natok-slider-img");
+  const natokDotsContainer = document.getElementById("natok-slider-dots");
 
-  images40by21.forEach((_, i) => {
+  natokImages.forEach((_, i) => {
     const dot = document.createElement("span");
     dot.className = "w-2.5 h-2.5 bg-gray-400 rounded-full inline-block cursor-pointer";
-    dot.addEventListener("click", () => showSlide40by21(i));
-    dotsContainer40by21.appendChild(dot);
+    dot.addEventListener("click", () => showNatokSlide(i));
+    natokDotsContainer.appendChild(dot);
   });
 
-  const dots40by21 = dotsContainer40by21.querySelectorAll("span");
+  const natokDots = natokDotsContainer.querySelectorAll("span");
 
-  function updateDots40by21() {
-    dots40by21.forEach((dot, idx) => {
-      dot.className = idx === current40by21
-        ? "w-2.5 h-2.5 bg-blue-500 rounded-full inline-block"
+  function updateNatokDots() {
+    natokDots.forEach((dot, idx) => {
+      dot.className = idx === natokCurrent
+        ? "w-2.5 h-2.5 bg-green-500 rounded-full inline-block"
         : "w-2.5 h-2.5 bg-gray-400 rounded-full inline-block cursor-pointer";
     });
   }
 
-  function showSlide40by21(i) {
-    current40by21 = i;
-    img40by21.style.opacity = 0;
+  function showNatokSlide(i) {
+    natokCurrent = i;
+    natokSliderImg.style.opacity = 0;
     setTimeout(() => {
-      img40by21.src = images40by21[current40by21];
-      img40by21.style.opacity = 1;
-      updateDots40by21();
+      natokSliderImg.src = natokImages[natokCurrent];
+      natokSliderImg.style.opacity = 1;
+      updateNatokDots();
     }, 300);
   }
 
-  function nextSlide40by21() {
-    current40by21 = (current40by21 + 1) % images40by21.length;
-    showSlide40by21(current40by21);
+  function nextNatokSlide() {
+    natokCurrent = (natokCurrent + 1) % natokImages.length;
+    showNatokSlide(natokCurrent);
   }
 
-  function prevSlide40by21() {
-    current40by21 = (current40by21 - 1 + images40by21.length) % images40by21.length;
-    showSlide40by21(current40by21);
+  function prevNatokSlide() {
+    natokCurrent = (natokCurrent - 1 + natokImages.length) % natokImages.length;
+    showNatokSlide(natokCurrent);
   }
 
-  document.getElementById("slider-40by21-next").addEventListener("click", nextSlide40by21);
-  document.getElementById("slider-40by21-prev").addEventListener("click", prevSlide40by21);
+  document.getElementById("natok-slider-next").addEventListener("click", nextNatokSlide);
+  document.getElementById("natok-slider-prev").addEventListener("click", prevNatokSlide);
 
-  setInterval(nextSlide40by21, 4000);
-  showSlide40by21(current40by21);
+  setInterval(nextNatokSlide, 4000);
+  showNatokSlide(natokCurrent);
 </script>
 
     <!-- Font Awesome CDN -->
