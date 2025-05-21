@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Rs Sports TV - Cricket  T20 (2025) Live Player</title>
+  <script src="https://content.jwplatform.com/libraries/SAHhwvZq.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet" />
+  <style>
+    body {
+      margin: 0;
+      background: #000;
+      color: #fff;
+      font-family: 'Roboto', sans-serif;
+    }
+    #player-container {
+      position: relative;
+      width: 100%;
+      max-height: 60vh;
+      aspect-ratio: 16 / 9;
+      background: #000;
+    }
+    #player {
+      width: 100%;
+      height: 100%;
+    }
+    #loading-spinner {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      border: 4px solid rgba(255, 255, 255, 0.3);
+      border-top: 4px solid #f44336;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      animation: spin 1s linear infinite;
+      z-index: 10;
+    }
+    @keyframes spin {
+      0% {
+        transform: translate(-50%, -50%) rotate(0deg);
+      }
+      100% {
+        transform: translate(-50%, -50%) rotate(360deg);
+      }
+    }
+    .headline {
+      background: #d32f2f;
+      color: #fff;
+      overflow: hidden;
+      white-space: nowrap;
+      padding: 10px 0;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+    }
+    .headline span {
+      display: inline-block;
+      padding-left: 100%;
+      animation: marquee 15s linear infinite;
+    }
+    @keyframes marquee {
+      0% {
+        transform: translateX(0%);
+      }
+      100% {
+        transform: translateX(-100%);
+      }
+    }
+    .channel-info {
+      display: flex;
+      align-items: center;
+      padding: 16px;
+      background: #121212;
+    }
+    .channel-info img {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-right: 16px;
+      border: 2px solid #f44336;
+    }
+    .channel-info h2 {
+      margin: 0;
+      font-size: 20px;
+      color: #fff;
+    }
+    .viewer-card {
+      margin: 8px auto;
+      padding: 6px 12px;
+      background: #1e1e1e;
+      border-radius: 8px;
+      text-align: center;
+      font-size: 14px;
+      max-width: 220px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    }
+    @media (max-width: 600px) {
+      .channel-info h2 {
+        font-size: 16px;
+      }
+      .channel-info img {
+        width: 48px;
+        height: 48px;
+      }
+      .viewer-card {
+        font-size: 13px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Video Player with Loader -->
+  <div id="player-container">
+    <div id="loading-spinner"></div>
+    <div id="player"></div>
+  </div>
+
+  <!-- Headline Ticker -->
+  <div class="headline">
+    <span> আপনারা এখন দেখছেন, বাংলাদেশ বনাম দুবাই , BAN 🆚 UAE T20 LIVE ( Cricket live Match  ) LIVE ! আমাদের সাথে যোগাযোগ করুন ▶ টেলিগ্রাম https://t.me/rs_sports_live </span>
+  </div>
+
+  <!-- Viewer Count Card -->
+  <div class="viewer-card">
+    <span id="visitor-count">0</span> viewer online
+  </div>
+
+  <!-- Channel Info -->
+  <div class="channel-info">
+    <img src="https://imgur.com/xj0AUZY.jpeg" alt="Channel Logo" />
+    <h2> BAN 🆚 UAE LIVE 2025 ( T20 Cricket  ) </h2>
+  </div>
+
+  <!-- Ad Code Inserted Below Channel Info -->
+  <script async="async" data-cfasync="false" src="//pl26276034.profitableratecpm.com/5c56eb7e6c3af0d348b7ea96ec3c5820/invoke.js"></script>
+  <div id="container-5c56eb7e6c3af0d348b7ea96ec3c5820"></div>
+
+  <script>
+    const spinner = document.getElementById("loading-spinner");
+    const playerInstance = jwplayer("player").setup({
+      file: "https://tv.onlinetvbd.com/fancode/global/primary/125494_english_hls_36192ta-di_h264/index.m3u8",
+      type: "hls",
+      autostart: true,
+      width: "100%",
+      aspectratio: "16:9",
+      controls: true,
+      displaytitle: true,
+      displaydescription: false,
+      playbackRateControls: true,
+      primary: "html5",
+      cast: {},
+      logo: {
+        file: "https://imgur.com/y3M1AeL.png",
+        link: "https://example.com",
+        position: "top-left"
+      },
+      skin: {
+        name: "seven"
+      }
+    });
+
+    playerInstance.on("ready", function () {
+      spinner.style.display = "none";
+    });
+    playerInstance.on("buffer", function () {
+      spinner.style.display = "block";
+    });
+    playerInstance.on("play", function () {
+      spinner.style.display = "none";
+    });
+    playerInstance.on("complete", function () {
+      spinner.style.display = "none";
+    });
+
+    // Firebase config
+    const firebaseConfig = {
+      apiKey: "AIzaSyD6DsOIARknAtMjK46YVza6spl77O9O5FE",
+      authDomain: "rs-sports-live.firebaseapp.com",
+      databaseURL: "https://rs-sports-live-default-rtdb.firebaseio.com",
+      projectId: "rs-sports-live",
+      storageBucket: "rs-sports-live.firebasestorage.app",
+      messagingSenderId: "220170551322",
+      appId: "1:220170551322:web:dc511a89094b50fa1c51a3"
+    };
+
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+    const connectionsRef = db.ref("connections/page-1");
+    const connectedRef = db.ref(".info/connected");
+
+    connectedRef.on("value", (snap) => {
+      if (snap.val() === true) {
+        const con = connectionsRef.push(true);
+        con.onDisconnect().remove();
+      }
+    });
+
+    connectionsRef.on("value", (snap) => {
+      document.getElementById("visitor-count").textContent = snap.numChildren();
+    });
+  </script>
+</body>
+</html>
