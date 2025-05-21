@@ -1,4 +1,4 @@
-<meta name='viewport' content='width=device-width, initial-scale=1'/><html lang="en">
+<meta name='viewport' content='width=device-width, initial-scale=1'/><meta name='viewport' content='width=device-width, initial-scale=1'/><html lang="en">
 <head>
   <meta charset="utf-8" />
   <meta content="width=device-width, initial-scale=1" name="viewport" />
@@ -104,24 +104,122 @@
 </div>
   <header class="bg-[#1a1a1a] border-b border-red-600">
     <div class="max-w-5xl mx-auto py-4 flex justify-between items-center px-4">
-      <img alt="Fredflix Logo" class="h-10 object-contain" src="https://imgur.com/t9VAN9c.png" />
+      <img alt="Rs Sports Logo" class="h-10 object-contain" src="https://imgur.com/t9VAN9c.png" />
       <div id="clock" class="text-lg font-semibold"></div>
     </div>
   </header>
 
   <main class="max-w-5xl mx-auto px-4 space-y-10 mt-6">
 
-    <!-- Slider -->
-    <section class="relative overflow-hidden rounded-lg">
-      <div class="relative">
-        <img id="slider" class="w-full slider-image rounded-md" src="https://image.tsports.com/images/mobile_thumbnail/1742534265-IMG_3293.jpeg" />
-      </div>
-      <div class="absolute bottom-4 left-1/2 -translate-x-1/2 flex space-x-2">
-        <span class="dot w-3 h-3 rounded-full bg-gray-400"></span>
-        <span class="dot w-3 h-3 rounded-full bg-gray-400"></span>
-        <span class="dot w-3 h-3 rounded-full bg-gray-400"></span>
-      </div>
-    </section>
+    
+
+
+<!-- Natok Slider with 40:21 Ratio and Green Glow -->
+<section class="relative overflow-hidden rounded-lg mb-8 max-w-6xl mx-auto border border-green-600 shadow-[0_0_20px_rgba(0,255,0,0.4)]">
+  <div class="relative aspect-[40/21]">
+    <div id="natok-slider" class="w-full h-full overflow-hidden rounded-md relative">
+      <img id="natok-slider-img" src="" 
+           class="w-full h-full object-cover transition-opacity duration-700 rounded-md">
+
+      <!-- Navigation Arrows -->
+      <button id="natok-slider-prev" class="absolute left-2 top-1/2 -translate-y-1/2 bg-black/50 text-white px-2 py-1 rounded-full hover:bg-white hover:text-black transition">
+        &#10094;
+      </button>
+      <button id="natok-slider-next" class="absolute right-2 top-1/2 -translate-y-1/2 bg-black/50 text-white px-2 py-1 rounded-full hover:bg-white hover:text-black transition">
+        &#10095;
+      </button>
+    </div>
+
+    <!-- Dots -->
+    <div class="flex justify-center gap-2 mt-2" id="natok-slider-dots"></div>
+  </div>
+</section>
+<!-- Google Font for Sporty Look -->
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap" rel="stylesheet">
+
+<style>
+  .running-text {
+    font-family: 'Orbitron', sans-serif;
+    background-color: #000;
+    color: #FFD700;
+    padding: 12px 20px;
+    font-weight: 700;
+    font-size: 18px;
+    border: 2px solid #FFD700;
+    border-radius: 6px;
+    box-shadow: 0 0 10px #FFD700;
+    transition: all 0.3s ease;
+    margin-bottom: 20px;
+  }
+
+  .running-text:hover {
+    color: #fff;
+    background-color: #111;
+    box-shadow: 0 0 20px #FFD700;
+  }
+</style>
+
+<marquee behavior="scroll" direction="left" scrollamount="6" class="running-text">
+  লাইভ সম্প্রচার চলছে: RS Sports TV তে দেখুন এক্সক্লুসিভ খেলা, স্কোর ও সবশেষ স্পোর্টস আপডেট!
+</marquee>
+
+
+<script>
+  const natokImages = [
+    "https://imgur.com/OWYSwqC.jpeg",
+    "https://imgur.com/KBtBjPt.jpeg",
+    "https://imgur.com/OWYSwqC.jpeg",
+    "https://imgur.com/KBtBjPt.jpeg",
+    "https://imgur.com/OWYSwqC.jpeg"
+  ];
+
+  let natokCurrent = 0;
+  const natokSliderImg = document.getElementById("natok-slider-img");
+  const natokDotsContainer = document.getElementById("natok-slider-dots");
+
+  natokImages.forEach((_, i) => {
+    const dot = document.createElement("span");
+    dot.className = "w-2.5 h-2.5 bg-gray-400 rounded-full inline-block cursor-pointer";
+    dot.addEventListener("click", () => showNatokSlide(i));
+    natokDotsContainer.appendChild(dot);
+  });
+
+  const natokDots = natokDotsContainer.querySelectorAll("span");
+
+  function updateNatokDots() {
+    natokDots.forEach((dot, idx) => {
+      dot.className = idx === natokCurrent
+        ? "w-2.5 h-2.5 bg-green-500 rounded-full inline-block"
+        : "w-2.5 h-2.5 bg-gray-400 rounded-full inline-block cursor-pointer";
+    });
+  }
+
+  function showNatokSlide(i) {
+    natokCurrent = i;
+    natokSliderImg.style.opacity = 0;
+    setTimeout(() => {
+      natokSliderImg.src = natokImages[natokCurrent];
+      natokSliderImg.style.opacity = 1;
+      updateNatokDots();
+    }, 300);
+  }
+
+  function nextNatokSlide() {
+    natokCurrent = (natokCurrent + 1) % natokImages.length;
+    showNatokSlide(natokCurrent);
+  }
+
+  function prevNatokSlide() {
+    natokCurrent = (natokCurrent - 1 + natokImages.length) % natokImages.length;
+    showNatokSlide(natokCurrent);
+  }
+
+  document.getElementById("natok-slider-next").addEventListener("click", nextNatokSlide);
+  document.getElementById("natok-slider-prev").addEventListener("click", prevNatokSlide);
+
+  setInterval(nextNatokSlide, 4000);
+  showNatokSlide(natokCurrent);
+</script>
 
     <!-- Font Awesome CDN -->
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
@@ -350,16 +448,7 @@
       img: "https://imgur.com/rWv5gz7.jpeg",
       link: "goodbad.html"
     },
-    {
-      title: "Hello Guru Movie",
-      img: "https://imgur.com/wSmauZ2.jpg",
-      link: "hellogurumovie.html"
-  },
-  {
-      title: "Priyotoma",
-      img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRQIkyr7qtEShm4Yy9rybz18jImGoNJM66xlg&s",
-      link: "priyotoma.html"
-  },
+    
     // আরও মুভি এখানে অ্যাড করুন
   ];
 
