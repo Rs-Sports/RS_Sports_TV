@@ -1,0 +1,99 @@
+
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>All Movies - RS Sports TV</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      background-color: #111;
+      color: white;
+      font-family: 'Poppins', sans-serif;
+    }
+    .poster-img {
+      aspect-ratio: 9 / 16;
+      object-fit: cover;
+      border-radius: 12px;
+      transition: transform 0.3s ease;
+      width: 100%;
+    }
+    .poster-img:hover {
+      transform: scale(1.05);
+    }
+    .slider {
+      width: 100%;
+      max-width: 1000px;
+      height: 200px;
+      overflow: hidden;
+      border-radius: 1rem;
+      margin: 0 auto 2rem;
+    }
+    .slides {
+      display: flex;
+      width: 500%;
+      animation: slide 20s infinite;
+    }
+    .slides img {
+      width: 100%;
+      object-fit: cover;
+    }
+    @keyframes slide {
+      0%   { margin-left: 0%; }
+      20%  { margin-left: 0%; }
+      25%  { margin-left: -100%; }
+      45%  { margin-left: -100%; }
+      50%  { margin-left: -200%; }
+      70%  { margin-left: -200%; }
+      75%  { margin-left: -300%; }
+      95%  { margin-left: -300%; }
+      100% { margin-left: -400%; }
+    }
+  </style>
+</head>
+<body class="p-4">
+
+  <!-- Slider Section -->
+  <div class="slider shadow-lg border-2 border-green-600">
+    <div class="slides">
+      <img src="https://i.imgur.com/ucBGTqE.jpeg" alt="Slide 1">
+      <img src="https://i.imgur.com/QJBVw1y.jpeg" alt="Slide 2">
+      <img src="https://i.imgur.com/wSmauZ2.jpg" alt="Slide 3">
+      <img src="https://i.imgur.com/yxqTfER.jpg" alt="Slide 4">
+      <img src="https://i.imgur.com/NcnmUay.jpg" alt="Slide 5">
+    </div>
+  </div>
+
+  <!-- Title Card -->
+  <div class="max-w-4xl mx-auto mb-8">
+    <div class="bg-[#1f1f1f] border border-green-600 p-4 rounded-xl shadow-lg text-center">
+      <h1 class="text-3xl font-bold text-green-400">All Natoks</h1>
+    </div>
+  </div>
+
+  <!-- Natok Grid -->
+  <div class="grid grid-cols-3 gap-4 max-w-6xl mx-auto">
+    <a href="n1.html" target="_blank">
+      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRAkWvnBNdD6zahXmSKeALvtHmdnW9rw8BRXAEiq8-h37WCMP0UVk_AXNQ&s=10" alt="Haldaa" class="poster-img" />
+    </a>
+    <a href="natunbou.html" target="_blank">
+      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ6OH04kKLWzrv2n7r7cSvoH0zbqJZzuNy3wQ_oWRChfSceD5zdDDDzoSI&s=10" alt="Notun Bou" class="poster-img" />
+    </a>
+    <a href="cuteprotibeshi.html" target="_blank">
+      <img src="https://i.imgur.com/zZ9ZQ6F.jpg" alt="Cute Protibeshi" class="poster-img" />
+    </a>
+    <a href="n4.html" target="_blank">
+      <img src="https://i.imgur.com/ji5vQmn.jpg" alt="Drama 4" class="poster-img" />
+    </a>
+    <a href="n5.html" target="_blank">
+      <img src="https://i.imgur.com/yxqTfER.jpg" alt="Drama 5" class="poster-img" />
+    </a>
+    <a href="n6.html" target="_blank">
+      <img src="https://i.imgur.com/NcnmUay.jpg" alt="Drama 6" class="poster-img" />
+    </a>
+  </div>
+
+</body>
+</html>
