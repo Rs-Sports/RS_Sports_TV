@@ -55,16 +55,84 @@
 </head>
 <body class="p-4">
 
-  <!-- Slider Section -->
-  <div class="slider shadow-lg border-2 border-green-600">
-    <div class="slides">
-      <img src="https://i.imgur.com/ucBGTqE.jpeg" alt="Slide 1">
-      <img src="https://i.imgur.com/QJBVw1y.jpeg" alt="Slide 2">
-      <img src="https://i.imgur.com/wSmauZ2.jpg" alt="Slide 3">
-      <img src="https://i.imgur.com/yxqTfER.jpg" alt="Slide 4">
-      <img src="https://i.imgur.com/NcnmUay.jpg" alt="Slide 5">
+  
+<!-- Natok Slider with 40:21 Ratio and Green Glow -->
+<section class="relative overflow-hidden rounded-lg mb-8 max-w-6xl mx-auto border border-green-600 shadow-[0_0_20px_rgba(0,255,0,0.4)]">
+  <div class="relative aspect-[40/21]">
+    <div id="natok-slider" class="w-full h-full overflow-hidden rounded-md relative">
+      <img id="natok-slider-img" src="https://i.imgur.com/ucBGTqE.jpeg" 
+           class="w-full h-full object-cover transition-opacity duration-700 rounded-md">
+
+      <!-- Navigation Arrows -->
+      <button id="natok-slider-prev" class="absolute left-2 top-1/2 -translate-y-1/2 bg-black/50 text-white px-2 py-1 rounded-full hover:bg-white hover:text-black transition">
+        &#10094;
+      </button>
+      <button id="natok-slider-next" class="absolute right-2 top-1/2 -translate-y-1/2 bg-black/50 text-white px-2 py-1 rounded-full hover:bg-white hover:text-black transition">
+        &#10095;
+      </button>
     </div>
+
+    <!-- Dots -->
+    <div class="flex justify-center gap-2 mt-2" id="natok-slider-dots"></div>
   </div>
+</section>
+
+<script>
+  const natokImages = [
+    "https://imgur.com/OWYSwqC.jpeg",
+    "https://imgur.com/KBtBjPt.jpeg",
+    "https://imgur.com/OWYSwqC.jpeg",
+    "https://imgur.com/KBtBjPt.jpeg",
+    "https://imgur.com/OWYSwqC.jpeg"
+  ];
+
+  let natokCurrent = 0;
+  const natokSliderImg = document.getElementById("natok-slider-img");
+  const natokDotsContainer = document.getElementById("natok-slider-dots");
+
+  natokImages.forEach((_, i) => {
+    const dot = document.createElement("span");
+    dot.className = "w-2.5 h-2.5 bg-gray-400 rounded-full inline-block cursor-pointer";
+    dot.addEventListener("click", () => showNatokSlide(i));
+    natokDotsContainer.appendChild(dot);
+  });
+
+  const natokDots = natokDotsContainer.querySelectorAll("span");
+
+  function updateNatokDots() {
+    natokDots.forEach((dot, idx) => {
+      dot.className = idx === natokCurrent
+        ? "w-2.5 h-2.5 bg-green-500 rounded-full inline-block"
+        : "w-2.5 h-2.5 bg-gray-400 rounded-full inline-block cursor-pointer";
+    });
+  }
+
+  function showNatokSlide(i) {
+    natokCurrent = i;
+    natokSliderImg.style.opacity = 0;
+    setTimeout(() => {
+      natokSliderImg.src = natokImages[natokCurrent];
+      natokSliderImg.style.opacity = 1;
+      updateNatokDots();
+    }, 300);
+  }
+
+  function nextNatokSlide() {
+    natokCurrent = (natokCurrent + 1) % natokImages.length;
+    showNatokSlide(natokCurrent);
+  }
+
+  function prevNatokSlide() {
+    natokCurrent = (natokCurrent - 1 + natokImages.length) % natokImages.length;
+    showNatokSlide(natokCurrent);
+  }
+
+  document.getElementById("natok-slider-next").addEventListener("click", nextNatokSlide);
+  document.getElementById("natok-slider-prev").addEventListener("click", prevNatokSlide);
+
+  setInterval(nextNatokSlide, 4000);
+  showNatokSlide(natokCurrent);
+</script>
 
   <!-- Title Card -->
   <div class="max-w-4xl mx-auto mb-8">
