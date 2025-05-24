@@ -2,7 +2,7 @@
 <html lang="bn">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>RS Movie Shop</title>
   <style>
     body {
@@ -14,20 +14,24 @@
 
     .video-container {
       width: 100%;
-      max-height: 450px;
+      max-width: 900px;
+      aspect-ratio: 16 / 9;
       position: relative;
       border-radius: 20px;
       overflow: hidden;
       box-shadow: 0 0 25px 5px limegreen;
       border: 2px solid #00ff00;
       background: linear-gradient(145deg, #0a0a0a, #1a1a1a);
+      margin: 20px auto;
+      cursor: pointer;
     }
 
     .video-container video {
       width: 100%;
-      height: auto;
+      height: 100%;
       display: block;
       border-radius: 20px;
+      background: black;
     }
 
     .live-badge {
@@ -36,11 +40,47 @@
       left: 10px;
       background: red;
       color: white;
-      padding: 5px 10px;
+      padding: 3px 8px;
       font-weight: bold;
       border-radius: 4px;
       font-size: 14px;
       box-shadow: 0 0 8px #ff0000;
+      z-index: 10;
+      user-select: none;
+    }
+
+    .skip-btn {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background-color: rgba(50, 205, 50, 0.6);
+      color: black;
+      font-weight: bold;
+      border: none;
+      padding: 15px 25px;
+      border-radius: 30px;
+      cursor: pointer;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+      user-select: none;
+      z-index: 20;
+      font-size: 18px;
+      box-shadow: 0 0 8px limegreen;
+      user-select: none;
+    }
+
+    #skipBackBtn {
+      left: 20px;
+    }
+
+    #skipForwardBtn {
+      right: 20px;
+    }
+
+    .skip-btn.show {
+      opacity: 1;
+      pointer-events: auto;
     }
 
     .running-text {
@@ -49,6 +89,11 @@
       padding: 10px;
       overflow: hidden;
       white-space: nowrap;
+      max-width: 900px;
+      margin: 0 auto;
+      border-radius: 10px;
+      box-shadow: 0 0 10px limegreen;
+      user-select: none;
     }
 
     .running-text span {
@@ -62,24 +107,20 @@
     }
 
     .section-header {
-      margin-top: 20px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      margin: 20px auto;
       font-size: 18px;
       font-weight: bold;
       text-shadow: 0 0 10px lime;
-      display: inline-block;
       padding: 8px 20px;
       background-color: rgba(0, 255, 0, 0.1);
       border-radius: 30px;
       box-shadow: 0 0 10px limegreen;
       user-select: none;
-      margin-left: auto;
-      margin-right: auto;
-      text-align: center;
-    }
-
-    .section-header h2 {
-      margin: 0;
-      letter-spacing: 2px;
+      max-width: 900px;
     }
 
     .section-header span {
@@ -98,7 +139,7 @@
 
     .playlist-grid {
       width: 95%;
-      max-width: 1200px;
+      max-width: 900px;
       margin: 30px auto;
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -123,7 +164,7 @@
 
     .playlist-item img {
       width: 100%;
-      aspect-ratio: 9/16;
+      aspect-ratio: 9 / 16;
       object-fit: cover;
       border-bottom: 1px solid #0f0;
     }
@@ -178,31 +219,33 @@
   </style>
 </head>
 <body>
-  <div class="video-container" id="videoContainer">
+  <div class="video-container" id="videoContainer" tabindex="0">
     <div class="live-badge">LIVE</div>
-    <video id="mainVideo" controls poster="poster1.jpg">
-      <source src="http://103.112.150.230/Data/disk3/movies/movies/hindidubbed/Vaamana%20(2025)/Vaamana.mp4" type="video/mp4" />
+    <video id="mainVideo" controls poster="https://imgur.com/UFpRJGw.jpeg">
+      <source id="videoSource" src="" type="video/mp4" />
       আপনার ব্রাউজার ভিডিও প্লে করতে পারছে না।
     </video>
+
+    <button id="skipBackBtn" class="skip-btn" title="Skip Back 10 seconds">&lt; -10s</button>
+    <button id="skipForwardBtn" class="skip-btn" title="Skip Forward 10 seconds">+10s &gt;</button>
   </div>
 
   <div class="running-text">
     <span>এই মুহূর্তে সরাসরি সম্প্রচার চলছে... নতুন খবর দেখতে নিচে দেখুন...</span>
   </div>
 
-  <div class="section-header animated-title" style="text-align:center;">
-    <h2>
+  <div class="section-header">
+    <h2 style="margin: 0 auto;">
       <span>A</span><span>L</span><span>L</span> <span>M</span><span>O</span><span>V</span><span>I</span><span>E</span><span>S</span>
     </h2>
   </div>
 
   <div class="playlist-grid" id="playlistGrid">
-    <!-- প্রথম ৬টি ভিডিও দেখানো -->
-    <div class="playlist-item" onclick="playVideo('video1.mp4', 'poster1.jpg')">
-      <img src="https://imgur.com/yA83Esn.jpg" alt="ভিডিও ১" />
+    <div class="playlist-item" onclick="playVideo('https://pixeldrain.com/api/file/pLuwqi8g', 'https://imgur.com/kRueFNk.jpeg')">
+      <img src="https://imgur.com/kRueFNk.jpeg" alt="ভিডিও ১" />
       <span>ভিডিও ১</span>
     </div>
-    <div class="playlist-item" onclick="playVideo('video2.mp4', 'poster2.jpg')">
+    <div class="playlist-item" onclick="playVideo('https://pixeldrain.com/api/file/wYdqR5fy', 'https://imgur.com/UFpRJGw.jpeg')">
       <img src="https://imgur.com/yA83Esn.jpg" alt="ভিডিও ২" />
       <span>ভিডিও ২</span>
     </div>
@@ -210,69 +253,52 @@
       <img src="https://imgur.com/yA83Esn.jpg" alt="ভিডিও ৩" />
       <span>ভিডিও ৩</span>
     </div>
-    <div class="playlist-item" onclick="playVideo('video4.mp4', 'poster4.jpg')">
-      <img src="https://imgur.com/yA83Esn.jpg" alt="ভিডিও ৪" />
+    <div class="playlist-item" onclick="playVideo('https://pixeldrain.com/api/file/wYdqR5fy', 'https://imgur.com/yA83Esn.jpg')">
+      <img src="https://imgur.com/UFpRJGw.jpeg" alt="ভিডিও ৪" />
       <span>ভিডিও ৪</span>
     </div>
-    <div class="playlist-item" onclick="playVideo('video5.mp4', 'poster5.jpg')">
+    <div class="playlist-item" onclick="playVideo('video2.mp4', 'poster2.jpg')">
       <img src="https://imgur.com/yA83Esn.jpg" alt="ভিডিও ৫" />
       <span>ভিডিও ৫</span>
     </div>
-    <div class="playlist-item" onclick="playVideo('video6.mp4', 'poster6.jpg')">
+    <div class="playlist-item" onclick="playVideo('video3.mp4', 'poster3.jpg')">
       <img src="https://imgur.com/yA83Esn.jpg" alt="ভিডিও ৬" />
       <span>ভিডিও ৬</span>
     </div>
-
-    <!-- বাকি ভিডিওগুলো লুকানো থাকবে -->
-    <div class="playlist-item" style="display:none;" onclick="playVideo('video7.mp4', 'poster7.jpg')">
-      <img src="https://imgur.com/yA83Esn.jpg" alt="ভিডিও ৭" />
-      <span>ভিডিও ৭</span>
+<div class="playlist-item" onclick="playVideo('https://pixeldrain.com/api/file/pLuwqi8g', 'https://imgur.com/UFpRJGw.jpeg')">
+      <img src="https://imgur.com/kRueFNk.jpeg" alt="ভিডিও ১" />
+      <span>ভিডিও ১</span>
     </div>
-    <div class="playlist-item" style="display:none;" onclick="playVideo('video8.mp4', 'poster8.jpg')">
-      <img src="https://imgur.com/yA83Esn.jpg" alt="ভিডিও ৮" />
-      <span>ভিডিও ৮</span>
+    <div class="playlist-item" onclick="playVideo('https://pixeldrain.com/api/file/wYdqR5fy', 'https://imgur.com/UFpRJGw.jpeg')">
+      <img src="https://imgur.com/yA83Esn.jpg" alt="ভিডিও ২" />
+      <span>ভিডিও ২</span>
     </div>
-    <div class="playlist-item" style="display:none;" onclick="playVideo('video9.mp4', 'poster9.jpg')">
-      <img src="https://imgur.com/yA83Esn.jpg" alt="ভিডিও ৯" />
-      <span>ভিডিও ৯</span>
+    <div class="playlist-item" onclick="playVideo('video3.mp4', 'poster3.jpg')">
+      <img src="https://imgur.com/yA83Esn.jpg" alt="ভিডিও ৩" />
+      <span>ভিডিও ৩</span>
     </div>
-    <div class="playlist-item" style="display:none;" onclick="playVideo('video10.mp4', 'poster10.jpg')">
-      <img src="https://imgur.com/yA83Esn.jpg" alt="ভিডিও ১০" />
-      <span>ভিডিও ১০</span>
+    <div class="playlist-item" onclick="playVideo('https://pixeldrain.com/api/file/wYdqR5fy', 'https://imgur.com/yA83Esn.jpg')">
+      <img src="https://imgur.com/yA83Esn.jpg" alt="ভিডিও ৪" />
+      <span>ভিডিও ৪</span>
     </div>
-    <div class="playlist-item" style="display:none;" onclick="playVideo('video11.mp4', 'poster11.jpg')">
-      <img src="https://imgur.com/yA83Esn.jpg" alt="ভিডিও ১১" />
-      <span>ভিডিও ১১</span>
+    <div class="playlist-item" onclick="playVideo('video2.mp4', 'poster2.jpg')">
+      <img src="https://imgur.com/yA83Esn.jpg" alt="ভিডিও ৫" />
+      <span>ভিডিও ৫</span>
     </div>
-    <div class="playlist-item" style="display:none;" onclick="playVideo('video12.mp4', 'poster12.jpg')">
-      <img src="https://imgur.com/yA83Esn.jpg" alt="ভিডিও ১২" />
-      <span>ভিডিও ১২</span>
-    </div>
-    <div class="playlist-item" style="display:none;" onclick="playVideo('video13.mp4', 'poster13.jpg')">
-      <img src="https://imgur.com/yA83Esn.jpg" alt="ভিডিও ১৩" />
-      <span>ভিডিও ১৩</span>
-    </div>
-    <div class="playlist-item" style="display:none;" onclick="playVideo('video14.mp4', 'poster14.jpg')">
-      <img src="https://imgur.com/yA83Esn.jpg" alt="ভিডিও ১৪" />
-      <span>ভিডিও ১৪</span>
-    </div>
-    <div class="playlist-item" style="display:none;" onclick="playVideo('video15.mp4', 'poster15.jpg')">
-      <img src="https://imgur.com/yA83Esn.jpg" alt="ভিডিও ১৫" />
-      <span>ভিডিও ১৫</span>
+    <div class="playlist-item" onclick="playVideo('video3.mp4', 'poster3.jpg')">
+      <img src="https://imgur.com/yA83Esn.jpg" alt="ভিডিও ৬" />
+      <span>ভিডিও ৬</span>
     </div>
   </div>
 
-  <!-- Load More Button -->
   <button class="load-more-btn" onclick="loadMore(event)">Load More</button>
 
-  <!-- Telegram icon -->
   <div class="social-contact">
     <a href="https://t.me/rsmovieshop" target="_blank" rel="noopener noreferrer" title="Telegram">
       <img src="https://cdn-icons-png.flaticon.com/512/2111/2111646.png" alt="Telegram" />
     </a>
   </div>
 
-  <!-- Copyright Section -->
   <footer style="text-align: center; padding: 20px; background: #111; color: #0f0; font-size: 14px; box-shadow: 0 -1px 5px limegreen;">
     &copy; 2025 RS Movie Shop | Developed with love by RS Team
   </footer>
@@ -280,18 +306,54 @@
   <script>
     function playVideo(src, poster) {
       const video = document.getElementById('mainVideo');
-      video.src = src;
+      const source = document.getElementById('videoSource');
+      video.pause();
+      source.src = src;
       video.poster = poster;
       video.load();
       video.play();
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
-    function loadMore(event) {
-      const hiddenItems = document.querySelectorAll('.playlist-item[style*="display:none"]');
-      hiddenItems.forEach(item => item.style.display = 'flex');
-      event.target.style.display = 'none'; // Load More বাটন লুকিয়ে দেবে
+    const skipBackBtn = document.getElementById('skipBackBtn');
+    const skipForwardBtn = document.getElementById('skipForwardBtn');
+    const videoContainer = document.getElementById('videoContainer');
+
+    skipBackBtn.addEventListener('click', e => {
+      e.stopPropagation();
+      const video = document.getElementById('mainVideo');
+      video.currentTime = Math.max(0, video.currentTime - 10);
+    });
+
+    skipForwardBtn.addEventListener('click', e => {
+      e.stopPropagation();
+      const video = document.getElementById('mainVideo');
+      video.currentTime = Math.min(video.duration, video.currentTime + 10);
+    });
+
+    let skipTimeout;
+
+    function showSkipButtons() {
+      skipBackBtn.classList.add('show');
+      skipForwardBtn.classList.add('show');
+      clearTimeout(skipTimeout);
+      skipTimeout = setTimeout(() => {
+        skipBackBtn.classList.remove('show');
+        skipForwardBtn.classList.remove('show');
+      }, 3000);
     }
+
+    videoContainer.addEventListener('click', () => {
+      if (skipBackBtn.classList.contains('show')) {
+        clearTimeout(skipTimeout);
+        skipTimeout = setTimeout(() => {
+          skipBackBtn.classList.remove('show');
+          skipForwardBtn.classList.remove('show');
+        }, 3000);
+      } else {
+        showSkipButtons();
+      }
+    });
   </script>
 </body>
 </html>
