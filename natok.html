@@ -1,37 +1,30 @@
-<meta name='viewport' content='width=device-width, initial-scale=1'/><!DOCTYPE html>
-<html lang="bn">
+<!DOCTYPE html>
+<html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>RS Natok Shop</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RS Movie Shop</title>
   <style>
     body {
       margin: 0;
-      font-family: sans-serif;
+      font-family: Arial, sans-serif;
       background-color: #000;
       color: #fff;
     }
 
     .video-container {
-      width: 100%;
-      max-width: 900px;
-      aspect-ratio: 16 / 9;
       position: relative;
-      border-radius: 20px;
-      overflow: hidden;
-      box-shadow: 0 0 25px 5px limegreen;
-      border: 2px solid #00ff00;
-      background: linear-gradient(145deg, #0a0a0a, #1a1a1a);
+      max-width: 960px;
       margin: 20px auto;
-      cursor: pointer;
+      box-shadow: 0 0 20px limegreen;
+      border-radius: 10px;
+      overflow: hidden;
     }
 
-    .video-container video {
+    video {
       width: 100%;
-      height: 100%;
       display: block;
-      border-radius: 20px;
-      background: black;
+      background: #000;
     }
 
     .live-badge {
@@ -39,48 +32,11 @@
       top: 10px;
       left: 10px;
       background: red;
-      color: white;
-      padding: 3px 8px;
+      padding: 4px 10px;
+      font-size: 14px;
       font-weight: bold;
       border-radius: 4px;
-      font-size: 14px;
-      box-shadow: 0 0 8px #ff0000;
-      z-index: 10;
-      user-select: none;
-    }
-
-    .skip-btn {
-      position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
-      background-color: rgba(50, 205, 50, 0.6);
-      color: black;
-      font-weight: bold;
-      border: none;
-      padding: 15px 25px;
-      border-radius: 30px;
-      cursor: pointer;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.3s ease;
-      user-select: none;
-      z-index: 20;
-      font-size: 18px;
-      box-shadow: 0 0 8px limegreen;
-      user-select: none;
-    }
-
-    #skipBackBtn {
-      left: 20px;
-    }
-
-    #skipForwardBtn {
-      right: 20px;
-    }
-
-    .skip-btn.show {
-      opacity: 1;
-      pointer-events: auto;
+      z-index: 1;
     }
 
     .running-text {
@@ -89,8 +45,8 @@
       padding: 10px;
       overflow: hidden;
       white-space: nowrap;
-      max-width: 900px;
-      margin: 0 auto;
+      max-width: 960px;
+      margin: 20px auto;
       border-radius: 10px;
       box-shadow: 0 0 10px limegreen;
       user-select: none;
@@ -106,264 +62,161 @@
       100% { transform: translateX(-100%); }
     }
 
-    .section-header {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      text-align: center;
-      margin: 20px auto;
-      font-size: 18px;
-      font-weight: bold;
-      text-shadow: 0 0 10px lime;
-      padding: 8px 20px;
-      background-color: rgba(0, 255, 0, 0.1);
-      border-radius: 30px;
-      box-shadow: 0 0 10px limegreen;
-      user-select: none;
-      max-width: 900px;
-    }
-
-    .section-header span {
-      display: inline-block;
-      animation: colorShift 3s linear infinite;
-      font-size: 18px;
-    }
-
-    @keyframes colorShift {
-      0%, 100% { color: red; }
-      20% { color: orange; }
-      40% { color: yellow; }
-      60% { color: green; }
-      80% { color: blue; }
-    }
-
-    .playlist-grid {
-      width: 95%;
-      max-width: 900px;
+    .playlist {
+      max-width: 960px;
       margin: 30px auto;
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: repeat(2, 1fr);
       gap: 20px;
-    }
-
-    .playlist-item {
-      background: #111;
-      border: 2px solid #0f0;
-      border-radius: 10px;
-      overflow: hidden;
-      cursor: pointer;
-      transition: 0.3s;
-      text-align: center;
-      display: flex;
-      flex-direction: column;
-    }
-
-    .playlist-item:hover {
-      transform: scale(1.03);
     }
 
     .playlist-item img {
       width: 100%;
-      aspect-ratio: 9 / 16;
-      object-fit: cover;
-      border-bottom: 1px solid #0f0;
+      aspect-ratio: 16 / 9;
+      border-radius: 12px;
+      cursor: pointer;
+      box-shadow: 0 0 12px #0f0;
+      transition: transform 0.2s, box-shadow 0.3s;
     }
 
-    .playlist-item span {
-      padding: 10px;
+    .playlist-item img:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 20px #00ff00;
+    }
+
+    .load-more {
+      display: block;
+      margin: 20px auto 40px;
+      padding: 10px 25px;
       font-size: 16px;
-    }
-
-    .social-contact {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      z-index: 1000;
-    }
-
-    .social-contact a img {
-      width: 50px;
-      height: 50px;
-      margin: 5px;
-      border-radius: 50%;
-      box-shadow: 0 0 10px limegreen;
-      transition: transform 0.3s ease;
-    }
-
-    .social-contact a img:hover {
-      transform: scale(1.1);
-    }
-
-    @media (max-width: 768px) {
-      .playlist-grid {
-        grid-template-columns: repeat(3, 1fr);
-      }
-    }
-
-    button.load-more-btn {
-      padding: 10px 20px;
       background: limegreen;
       color: black;
-      font-weight: bold;
       border: none;
       border-radius: 8px;
       cursor: pointer;
       box-shadow: 0 0 10px lime;
-      margin: 20px auto 40px auto;
+    }
+
+    .telegram-icon {
+      position: fixed;
+      bottom: 60px;
+      right: 20px;
+      background: #229ED9;
+      color: white;
+      padding: 12px;
+      border-radius: 50%;
+      font-size: 24px;
+      text-align: center;
+      z-index: 999;
+      text-decoration: none;
+      transform: rotate(-20deg);
+    }
+
+    .telegram-icon svg {
       display: block;
     }
 
-    button.load-more-btn:hover {
-      background: #32cd32;
+    footer {
+      text-align: center;
+      padding: 20px;
+      background: #000;
+      color: #0f0;
+      font-size: 14px;
+      border-top: 1px solid #0f0;
     }
   </style>
 </head>
 <body>
-  <div class="video-container" id="videoContainer" tabindex="0">
-    <div class="live-badge">LIVE</div>
-    <video id="mainVideo" controls poster="https://imgur.com/xf02eYu.jpeg">
-      <source id="videoSource" src="" type="video/mp4" />
-      আপনার ব্রাউজার ভিডিও প্লে করতে পারছে না।
-    </video>
 
-    <button id="skipBackBtn" class="skip-btn" title="Skip Back 10 seconds">&lt; -10s</button>
-    <button id="skipForwardBtn" class="skip-btn" title="Skip Forward 10 seconds">+10s &gt;</button>
+  <div class="video-container" id="videoContainer">
+    <div class="live-badge">LIVE</div>
+    <video controls id="mainVideo" poster="https://i.imgur.com/placeholder.png">
+      <source id="videoSource" src="" type="video/mp4" />
+      Your browser does not support the video tag.
+    </video>
   </div>
 
   <div class="running-text">
-    <span>এই মুহূর্তে সরাসরি সম্প্রচার চলছে... নতুন খবর দেখতে নিচে দেখুন...</span>
+    <span>Welcome to RS Movie Shop - Latest Natoks & Videos Streaming Now!</span>
   </div>
 
-  <div class="section-header">
-    <h2 style="margin: 0 auto;">
-      <span>A</span><span>L</span><span>L</span> <span>N</span><span>A</span><span>T</span><span>O</span><span>K</span><span>S</span>
-    </h2>
-  </div>
+  <div class="playlist" id="playlist"></div>
 
-  <div class="playlist-grid" id="playlistGrid">
-    <div class="playlist-item" onclick="playVideo('https://pixeldrain.com/api/file/pLuwqi8g', 'https://imgur.com/xf02eYu.jpeg')">
-      <img src="https://imgur.com/kRueFNk.jpeg" alt="ভিডিও ১" />
-      <span>ভিডিও ১</span>
-    </div>
-    <div class="playlist-item" onclick="playVideo('https://pixeldrain.com/api/file/wYdqR5fy', 'https://imgur.com/xf02eYu.jpeg')">
-      <img src="https://imgur.com/yA83Esn.jpg" alt="ভিডিও ২" />
-      <span>ভিডিও ২</span>
-    </div>
-    <div class="playlist-item" onclick="playVideo('https://pixeldrain.com/api/file/wYdqR5fy', 'https://imgur.com/xf02eYu.jpeg')">
-      <img src="https://imgur.com/yA83Esn.jpg" alt="ভিডিও ২" />
-      <span>ভিডিও ২</span>
-    </div>
-    <div class="playlist-item" onclick="playVideo('https://pixeldrain.com/api/file/wYdqR5fy', 'https://imgur.com/xf02eYu.jpeg')">
-      <img src="https://imgur.com/yA83Esn.jpg" alt="ভিডিও ২" />
-      <span>ভিডিও ২</span>
-    </div>
-    <div class="playlist-item" onclick="playVideo('https://pixeldrain.com/api/file/pLuwqi8g', 'https://imgur.com/xf02eYu.jpeg')">
-      <img src="https://imgur.com/kRueFNk.jpeg" alt="ভিডিও ১" />
-      <span>ভিডিও ১</span>
-    </div>
-    <div class="playlist-item" onclick="playVideo('https://pixeldrain.com/api/file/wYdqR5fy', 'https://imgur.com/xf02eYu.jpeg')">
-      <img src="https://imgur.com/yA83Esn.jpg" alt="ভিডিও ২" />
-      <span>ভিডিও ২</span>
-    </div>
-    <div class="playlist-item" onclick="playVideo('https://pixeldrain.com/api/file/wYdqR5fy', 'https://imgur.com/xf02eYu.jpeg')">
-      <img src="https://imgur.com/yA83Esn.jpg" alt="ভিডিও ২" />
-      <span>ভিডিও ২</span>
-    </div>
-    <div class="playlist-item" onclick="playVideo('https://pixeldrain.com/api/file/wYdqR5fy', 'https://imgur.com/xf02eYu.jpeg')">
-      <img src="https://imgur.com/yA83Esn.jpg" alt="ভিডিও ২" />
-      <span>ভিডিও ২</span>
-    </div>
-    <div class="playlist-item" onclick="playVideo('https://pixeldrain.com/api/file/pLuwqi8g', 'https://imgur.com/xf02eYu.jpeg')">
-      <img src="https://imgur.com/kRueFNk.jpeg" alt="ভিডিও ১" />
-      <span>ভিডিও ১</span>
-    </div>
-    <div class="playlist-item" onclick="playVideo('https://pixeldrain.com/api/file/wYdqR5fy', 'https://imgur.com/xf02eYu.jpeg')">
-      <img src="https://imgur.com/yA83Esn.jpg" alt="ভিডিও ২" />
-      <span>ভিডিও ২</span>
-    </div>
-    <div class="playlist-item" onclick="playVideo('https://pixeldrain.com/api/file/wYdqR5fy', 'https://imgur.com/xf02eYu.jpeg')">
-      <img src="https://imgur.com/yA83Esn.jpg" alt="ভিডিও ২" />
-      <span>ভিডিও ২</span>
-    </div>
-    <div class="playlist-item" onclick="playVideo('https://pixeldrain.com/api/file/wYdqR5fy', 'https://imgur.com/xf02eYu.jpeg')">
-      <img src="https://imgur.com/yA83Esn.jpg" alt="ভিডিও ২" />
-      <span>ভিডিও ২</span>
-    </div>
-  </div>
+  <button class="load-more" onclick="loadMore()">Load More</button>
 
-  <button class="load-more-btn" onclick="loadMore(event)">Load More</button>
+  <a class="telegram-icon" href="https://t.me/rsmovieshop" title="Join Telegram">
+    <svg fill="white" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+      <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"></path>
+    </svg>
+  </a>
 
-  <div class="social-contact">
-    <a href="https://t.me/rsmovieshop" target="_blank" rel="noopener noreferrer" title="Telegram">
-      <img src="https://cdn-icons-png.flaticon.com/512/2111/2111646.png" alt="Telegram" />
-    </a>
-  </div>
-
-  <footer style="text-align: center; padding: 20px; background: #111; color: #0f0; font-size: 14px; box-shadow: 0 -1px 5px limegreen;">
-    &copy; 2025 RS Movie Shop | Developed with love by RS Team
+  <footer>
+    © 2025 RS Movie Shop | All rights reserved.
   </footer>
 
   <script>
+    const playlistData = [
+      { src: 'https://pixeldrain.com/api/file/hjapBiPM', poster: 'https://imgur.com/9ihNvRn.jpeg' },
+      { src: 'https://pixeldrain.com/api/file/C1NdF58E', poster: 'https://imgur.com/g4A6nVc.jpeg' },
+      { src: 'https://pixeldrain.com/api/file/hSZVLT6U', poster: 'https://imgur.com/lhEltz9.jpeg' },
+      { src: 'https://pixeldrain.com/api/file/4', poster: 'https://i.imgur.com/4.jpg' },
+      { src: 'https://pixeldrain.com/api/file/5', poster: 'https://i.imgur.com/5.jpg' },
+      { src: 'https://pixeldrain.com/api/file/6', poster: 'https://i.imgur.com/6.jpg' },
+      { src: 'https://pixeldrain.com/api/file/7', poster: 'https://i.imgur.com/7.jpg' },
+      { src: 'https://pixeldrain.com/api/file/8', poster: 'https://i.imgur.com/8.jpg' },
+      { src: 'https://pixeldrain.com/api/file/9', poster: 'https://i.imgur.com/9.jpg' },
+      { src: 'https://pixeldrain.com/api/file/10', poster: 'https://i.imgur.com/10.jpg' },
+      { src: 'https://pixeldrain.com/api/file/11', poster: 'https://i.imgur.com/11.jpg' },
+      { src: 'https://pixeldrain.com/api/file/12', poster: 'https://i.imgur.com/12.jpg' },
+      { src: 'https://pixeldrain.com/api/file/13', poster: 'https://i.imgur.com/13.jpg' },
+      { src: 'https://pixeldrain.com/api/file/14', poster: 'https://i.imgur.com/14.jpg' },
+      { src: 'https://pixeldrain.com/api/file/15', poster: 'https://i.imgur.com/15.jpg' }
+    ];
+
+    let clickOnce = false;
+    let currentIndex = 0;
+
     function playVideo(src, poster) {
-      const video = document.getElementById('mainVideo');
-      const source = document.getElementById('videoSource');
-      video.pause();
-      source.src = src;
-      video.poster = poster;
-      video.load();
-      video.play();
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-
-    const skipBackBtn = document.getElementById('skipBackBtn');
-    const skipForwardBtn = document.getElementById('skipForwardBtn');
-    const videoContainer = document.getElementById('videoContainer');
-
-    skipBackBtn.addEventListener('click', e => {
-      e.stopPropagation();
-      const video = document.getElementById('mainVideo');
-      video.currentTime = Math.max(0, video.currentTime - 10);
-    });
-
-    skipForwardBtn.addEventListener('click', e => {
-      e.stopPropagation();
-      const video = document.getElementById('mainVideo');
-      video.currentTime = Math.min(video.duration, video.currentTime + 10);
-    });
-
-    let skipTimeout;
-
-    function showSkipButtons() {
-      skipBackBtn.classList.add('show');
-      skipForwardBtn.classList.add('show');
-      clearTimeout(skipTimeout);
-      skipTimeout = setTimeout(() => {
-        skipBackBtn.classList.remove('show');
-        skipForwardBtn.classList.remove('show');
-      }, 3000);
-    }
-
-    videoContainer.addEventListener('click', () => {
-      if (skipBackBtn.classList.contains('show')) {
-        clearTimeout(skipTimeout);
-        skipTimeout = setTimeout(() => {
-          skipBackBtn.classList.remove('show');
-          skipForwardBtn.classList.remove('show');
-        }, 3000);
+      const video = document.getElementById("mainVideo");
+      const source = document.getElementById("videoSource");
+      if (!clickOnce) {
+        clickOnce = true;
+        window.open("https://www.profitableratecpm.com/qpbsfqs6w0?key=ea8c197a2f7be4c233faa954d8a37358", "_blank");
+        setTimeout(() => {
+          source.src = src;
+          video.poster = poster;
+          video.load();
+          video.play();
+        }, 500);
       } else {
-        showSkipButtons();
+        source.src = src;
+        video.poster = poster;
+        video.load();
+        video.play();
       }
-    });
-  </script>
+    }
 
-<script>
-let adClicked = false;
-document.getElementById('videoContainer').addEventListener('click', function () {
-  if (!adClicked) {
-    adClicked = true;
-    window.open('https://www.profitableratecpm.com/qpbsfqs6w0?key=ea8c197a2f7be4c233faa954d8a37358', '_blank');
-  }
-});
-</script>
+    function loadPlaylistItems(count = 4) {
+      const container = document.getElementById("playlist");
+      const nextItems = playlistData.slice(currentIndex, currentIndex + count);
+      nextItems.forEach(item => {
+        const div = document.createElement("div");
+        div.className = "playlist-item";
+        div.innerHTML = `<img src="${item.poster}" onclick="playVideo('${item.src}', '${item.poster}')">`;
+        container.appendChild(div);
+      });
+      currentIndex += count;
+      if (currentIndex >= playlistData.length) {
+        document.querySelector(".load-more").style.display = "none";
+      }
+    }
+
+    function loadMore() {
+      loadPlaylistItems(2);
+    }
+
+    // Initial load
+    loadPlaylistItems(8);
+  </script>
 </body>
 </html>
