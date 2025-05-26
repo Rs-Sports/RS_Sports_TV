@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<meta name='viewport' content='width=device-width, initial-scale=1'/><!DOCTYPE html>
 <html lang="bn">
 <head>
   <meta charset="UTF-8" />
@@ -142,7 +142,7 @@
       max-width: 900px;
       margin: 30px auto;
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: repeat(2, 1fr);
       gap: 20px;
     }
 
@@ -164,7 +164,7 @@
 
     .playlist-item img {
       width: 100%;
-      aspect-ratio: 9 / 16;
+      aspect-ratio: 9 / 13;
       object-fit: cover;
       border-bottom: 1px solid #0f0;
     }
@@ -196,7 +196,7 @@
 
     @media (max-width: 768px) {
       .playlist-grid {
-        grid-template-columns: repeat(3, 1fr);
+        grid-template-columns: repeat(2, 1fr);
       }
     }
 
@@ -216,7 +216,29 @@
     button.load-more-btn:hover {
       background: #32cd32;
     }
-  </style>
+  
+.play-icon {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 60px;
+  height: 60px;
+  background: url('https://cdn-icons-png.flaticon.com/512/727/727245.png') no-repeat center center / contain;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+.playlist-item {
+  position: relative;
+}
+
+.playlist-item:hover .play-icon {
+  opacity: 1;
+}
+
+</style>
 </head>
 <body>
   <div class="video-container" id="videoContainer" tabindex="0">
@@ -304,16 +326,32 @@
   </footer>
 
   <script>
-    function playVideo(src, poster) {
-      const video = document.getElementById('mainVideo');
-      const source = document.getElementById('videoSource');
-      video.pause();
-      source.src = src;
-      video.poster = poster;
-      video.load();
-      video.play();
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+    
+  let adShown = false;
+  let pendingVideoSrc = "";
+  let pendingPoster = "";
+
+  function playVideo(src, poster) {
+    if (!adShown) {
+      adShown = true;
+      pendingVideoSrc = src;
+      pendingPoster = poster;
+      window.open("https://your-ad-link.com", "_blank"); // <-- এখানে অ্যাড লিংক বসাও
+      return;
     }
+
+    const video = document.getElementById('mainVideo');
+    const source = document.getElementById('videoSource');
+    video.pause();
+    source.src = src;
+    video.poster = poster;
+    video.load();
+    video.play();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+
+    // reset ad logic for future clicks
+    adShown = false;
+  }
 
     const skipBackBtn = document.getElementById('skipBackBtn');
     const skipForwardBtn = document.getElementById('skipForwardBtn');
