@@ -3,10 +3,15 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Rs Sports TV - Cricket  T20 (2025) Live Player</title>
-  <script src="https://content.jwplatform.com/libraries/SAHhwvZq.js"></script>
+  <title>Rs Sports TV - (2025) Player</title>
+
+  <!-- Video.js CSS -->
+  <link href="https://vjs.zencdn.net/8.9.0/video-js.css" rel="stylesheet" />
+
+  <!-- Firebase (আপনার আগের কোড অনুযায়ী) -->
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet" />
   <style>
     body {
@@ -21,10 +26,16 @@
       max-height: 60vh;
       aspect-ratio: 16 / 9;
       background: #000;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 0 10px 3px rgba(244, 67, 54, 0.6); /* হালকা লাল গ্লো */
     }
-    #player {
+    /* Video.js প্লেয়ার স্টাইল */
+    .video-js {
       width: 100%;
       height: 100%;
+      border-radius: 12px;
+      outline: none;
     }
     #loading-spinner {
       position: absolute;
@@ -115,12 +126,24 @@
   <!-- Video Player with Loader -->
   <div id="player-container">
     <div id="loading-spinner"></div>
-    <div id="player"></div>
+
+    <video
+      id="my-video"
+      class="video-js vjs-default-skin"
+      controls
+      autoplay
+      playsinline
+      preload="auto"
+      data-setup='{}'
+    >
+      <source src="https://alibabacdn2.tamashaweb.com/alibaba02/alibaba02stream_480p.m3u8?aliyunols=on" type="application/x-mpegURL" />
+      আপনার ব্রাউজার এই ভিডিও প্লেয়ার সাপোর্ট করে না।
+    </video>
   </div>
 
   <!-- Headline Ticker -->
   <div class="headline">
-    <span> আপনারা এখন দেখছেন, বাংলাদেশ বনাম দুবাই , BAN 🆚 UAE T20 LIVE ( Cricket live Match  ) LIVE ! আমাদের সাথে যোগাযোগ করুন ▶ টেলিগ্রাম https://t.me/rs_sports_live </span>
+    <span> আপনারা এখন দেখছেন, বাংলাদেশ বনাম পাকিস্তানের লাইভ খেলা (  BAN 🆚 PAK  ) TV ! আমাদের সাথে যোগাযোগ করুন ▶ টেলিগ্রাম https://t.me/rs_sports_live </span>
   </div>
 
   <!-- Viewer Count Card -->
@@ -130,52 +153,39 @@
 
   <!-- Channel Info -->
   <div class="channel-info">
-    <img src="https://imgur.com/xj0AUZY.jpeg" alt="Channel Logo" />
-    <h2> BAN 🆚 UAE LIVE 2025 ( T20 Cricket  ) </h2>
+    <img src="https://imgur.com/p1jyaNz.jpeg" alt="Channel Logo" />
+    <h2> Bangladesh 🆚 Pakistan  ( Live ) </h2>
   </div>
 
   <!-- Ad Code Inserted Below Channel Info -->
   <script async="async" data-cfasync="false" src="//pl26276034.profitableratecpm.com/5c56eb7e6c3af0d348b7ea96ec3c5820/invoke.js"></script>
   <div id="container-5c56eb7e6c3af0d348b7ea96ec3c5820"></div>
 
+  <!-- Video.js Script -->
+  <script src="https://vjs.zencdn.net/8.9.0/video.min.js"></script>
+
   <script>
     const spinner = document.getElementById("loading-spinner");
-    const playerInstance = jwplayer("player").setup({
-      file: "http://c1.frsports.info/PB28/index.m3u8",
-      type: "hls",
-      autostart: true,
-      width: "100%",
-      aspectratio: "16:9",
-      controls: true,
-      displaytitle: true,
-      displaydescription: false,
-      playbackRateControls: true,
-      primary: "html5",
-      cast: {},
-      logo: {
-        file: "https://imgur.com/y3M1AeL.png",
-        link: "https://example.com",
-        position: "top-left"
-      },
-      skin: {
-        name: "seven"
-      }
-    });
+    const player = videojs("my-video");
 
-    playerInstance.on("ready", function () {
+    // Hide spinner on ready & play, show on waiting (buffering)
+    player.ready(() => {
       spinner.style.display = "none";
     });
-    playerInstance.on("buffer", function () {
+
+    player.on("waiting", () => {
       spinner.style.display = "block";
     });
-    playerInstance.on("play", function () {
-      spinner.style.display = "none";
-    });
-    playerInstance.on("complete", function () {
+
+    player.on("playing", () => {
       spinner.style.display = "none";
     });
 
-    // Firebase config
+    player.on("ended", () => {
+      spinner.style.display = "none";
+    });
+
+    // Firebase config and viewer count logic (unchanged)
     const firebaseConfig = {
       apiKey: "AIzaSyD6DsOIARknAtMjK46YVza6spl77O9O5FE",
       authDomain: "rs-sports-live.firebaseapp.com",
@@ -186,7 +196,6 @@
       appId: "1:220170551322:web:dc511a89094b50fa1c51a3"
     };
 
-    // Initialize Firebase
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
     const connectionsRef = db.ref("connections/page-1");
