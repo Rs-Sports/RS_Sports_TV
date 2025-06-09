@@ -1,43 +1,57 @@
 <!DOCTYPE html>
 <html lang="bn">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>CricTon - IPL Live Player</title>
-  <script src="https://content.jwplatform.com/libraries/SAHhwvZq.js"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Live Video with Viewer Count, Running Text, and Channel Info</title>
+  <link href="https://vjs.zencdn.net/8.5.2/video-js.css" rel="stylesheet" />
+
   <style>
-    body {
+    * {
       margin: 0;
-      background: #000;
-      color: #fff;
-      font-family: 'Roboto', sans-serif;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      background-color: #000;
+      font-family: sans-serif;
+      padding: 24px 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
     }
 
-    #player-container {
-      position: relative;
-      width: 100%;
-      max-height: 60vh;
+    .video-card {
+      width: 95%;
+      max-width: 1200px;
       aspect-ratio: 16 / 9;
       background: #000;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 0 15px 5px #00ff00cc;
+      position: relative;
+      transition: box-shadow 0.3s ease-in-out;
     }
 
-    #player {
+    .video-card:hover {
+      box-shadow: 0 0 25px 10px #00ff00dd;
+    }
+
+    .video-js {
       width: 100%;
       height: 100%;
     }
 
-    /* Loader */
     #loading-spinner {
       position: absolute;
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
+      width: 40px;
+      height: 40px;
       border: 4px solid rgba(255, 255, 255, 0.3);
       border-top: 4px solid #f44336;
       border-radius: 50%;
-      width: 40px;
-      height: 40px;
       animation: spin 1s linear infinite;
       z-index: 10;
     }
@@ -47,119 +61,200 @@
       100% { transform: translate(-50%, -50%) rotate(360deg); }
     }
 
-    .headline {
-      background: #d32f2f;
-      color: #fff;
+    .viewer-box {
+      margin-top: 10px;
+      background-color: #111;
+      padding: 4px 10px;
+      border-radius: 6px;
+      color: #0f0;
+      font-size: 14px;
+      box-shadow: 0 0 6px rgba(0, 255, 0, 0.3);
+      border: 1px solid rgba(0, 255, 0, 0.2);
+      max-width: fit-content;
+      text-align: center;
+      user-select: none;
+    }
+
+    .running-text {
+      margin-top: 16px;
+      max-width: 1200px;
+      width: 95%;
+      background-color: rgba(0, 0, 0, 0.6);
+      border-radius: 6px;
+      border: 1px solid rgba(0, 255, 0, 0.2);
+      box-shadow: 0 0 10px rgba(0, 255, 0, 0.3);
       overflow: hidden;
-      white-space: nowrap;
-      padding: 10px 0;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.4);
+      position: relative;
+      height: 30px;
+      user-select: none;
     }
 
-    .headline span {
+    .running-text span {
       display: inline-block;
+      color: #0f0;
+      font-size: 18px;
+      white-space: nowrap;
       padding-left: 100%;
-      animation: marquee 15s linear infinite;
+      animation: scrollText 15s linear infinite;
+      text-shadow: 0 0 10px #00ff00, 0 0 20px #00ff00;
+      line-height: 30px;
     }
 
-    @keyframes marquee {
-      0%   { transform: translateX(0%); }
+    @keyframes scrollText {
+      0% { transform: translateX(0%); }
       100% { transform: translateX(-100%); }
     }
 
     .channel-info {
+      margin-top: 12px;
+      max-width: 1200px;
+      width: 95%;
       display: flex;
       align-items: center;
-      padding: 16px;
-      background: #121212;
+      gap: 12px;
+      color: #0f0;
+      user-select: none;
+      box-shadow: 0 0 10px rgba(0, 255, 0, 0.3);
+      padding: 6px 12px;
+      border-radius: 8px;
+      background-color: rgba(0, 0, 0, 0.6);
+      border: 1px solid rgba(0, 255, 0, 0.2);
+      font-weight: 600;
+      font-size: 18px;
     }
 
-    .channel-info img {
-      width: 60px;
-      height: 60px;
+    .channel-logo {
+      width: 40px;
+      height: 40px;
       border-radius: 50%;
       object-fit: cover;
-      margin-right: 16px;
-      border: 2px solid #f44336;
+      box-shadow: 0 0 8px #00ff00;
     }
 
-    .channel-info h2 {
-      margin: 0;
-      font-size: 20px;
-      color: #fff;
+    .channel-name {
+      white-space: nowrap;
     }
 
-    @media (max-width: 600px) {
-      .channel-info h2 {
-        font-size: 16px;
-      }
-      .channel-info img {
-        width: 48px;
-        height: 48px;
-      }
+    /* 📌 Ad block style */
+    .ad-box {
+      margin-top: 16px;
+      width: 95%;
+      max-width: 1200px;
+      min-height: 60px;
+    }
+
+    /* 📌 Telegram Icon bottom right */
+    .telegram-icon {
+      position: fixed;
+      bottom: 16px;
+      right: 16px;
+      z-index: 999;
+    }
+
+    .telegram-icon a {
+      display: flex;
+      align-items: center;
+      background-color: #0088cc;
+      padding: 10px 14px;
+      border-radius: 50px;
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+      box-shadow: 0 0 12px #00aaffcc;
+      transition: 0.3s;
+    }
+
+    .telegram-icon a:hover {
+      background-color: #0077b5;
+    }
+
+    .telegram-icon img {
+      width: 20px;
+      height: 20px;
+      margin-right: 6px;
     }
   </style>
 </head>
 <body>
 
-  <!-- Video Player with Loader -->
-  <div id="player-container">
+  <div class="video-card">
     <div id="loading-spinner"></div>
-    <div id="player"></div>
+    <video id="my-video" class="video-js vjs-default-skin" controls autoplay muted playsinline>
+      <source src="https://ddy6new.newkso.ru/ddy6/premium741/mono.m3u8" type="application/x-mpegURL" />
+      আপনার ব্রাউজার এই ভিডিও ফরম্যাট সাপোর্ট করে না।
+    </video>
   </div>
 
-  <!-- Headline Ticker -->
-  <div class="headline">
-    <span>এখন লাইভ চলছে: IPL Live  | Toffee  বাংলাদেশের খেলা সরাসরি দেখুন | স্পোর্টস আপডেটস এখানে পাওয়া যাবে সবসময়!</span>
+  <div class="viewer-box" id="visitorCount">Live Viewers: 0</div>
+
+  <div class="running-text">
+    <span>⚽ 🏏আজকের ম্যাচ সরাসরি দেখুন RS SPORTS-এ 🔥 Live Now! 🏆 সারা দেশে সেরা খেলার লাইভ আপডেট পেতে থাকুন!</span>
   </div>
 
-  <!-- Channel Info -->
   <div class="channel-info">
-    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQW7AeCl0TzeGaEx48NNfOfHXNd6PaVkB5JUXJaRpmTpsDQplFW5e_OWFkG&s=10" alt="Channel Logo">
-    <h2>iPL Live ( Toffee ) </h2>
+    <img src="https://imgur.com/7g4cemL.jpeg" alt="Channel Logo" class="channel-logo" />
+    <span class="channel-name">TEN Sports (HD) Live</span>
   </div>
 
+  <!-- ✅ Ad Section -->
+  <div class="ad-box">
+    <script async="async" data-cfasync="false" src="//pl26276034.profitableratecpm.com/5c56eb7e6c3af0d348b7ea96ec3c5820/invoke.js"></script>
+    <div id="container-5c56eb7e6c3af0d348b7ea96ec3c5820"></div>
+  </div>
+
+  <!-- ✅ Telegram Icon -->
+  <div class="telegram-icon">
+    <a href="https://t.me/yourusername" target="_blank">
+      <img src="https://cdn-icons-png.flaticon.com/512/2111/2111646.png" alt="Telegram Icon" />
+      Telegram
+    </a>
+  </div>
+
+  <script src="https://vjs.zencdn.net/8.5.2/video.min.js"></script>
   <script>
-    const spinner = document.getElementById("loading-spinner");
+    const player = videojs('my-video');
+    const spinner = document.getElementById('loading-spinner');
 
-    const playerInstance = jwplayer("player").setup({
-      file: "https://tv.bdixtv24.com/sports/m3u8.php/tenspk.m3u8", // আপনার লাইভ ভিডিও লিংক এখানে দিন
-      type: "hls",
-      autostart: true,
-      width: "100%",
-      aspectratio: "16:9",
-      controls: true,
-      displaytitle: true,
-      displaydescription: false,
-      playbackRateControls: true,
-      primary: "html5",
-      cast: {},
-      logo: {
-        file: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQW7AeCl0TzeGaEx48NNfOfHXNd6PaVkB5JUXJaRpmTpsDQplFW5e_OWFkG&s=10",
-        link: "https://example.com",
-        position: "top-right"
-      },
-      skin: {
-        name: "seven"
-      }
-    });
+    spinner.style.display = 'block';
 
-    playerInstance.on('ready', function() {
-      spinner.style.display = "none";
-    });
-
-    playerInstance.on('buffer', function() {
-      spinner.style.display = "block";
-    });
-
-    playerInstance.on('play', function() {
-      spinner.style.display = "none";
-    });
-
-    playerInstance.on('complete', function() {
-      spinner.style.display = "none";
+    player.ready(() => spinner.style.display = 'none');
+    player.on('waiting', () => spinner.style.display = 'block');
+    player.on('playing', () => spinner.style.display = 'none');
+    player.on('error', () => {
+      spinner.style.display = 'none';
+      console.error('Video error:', player.error());
     });
   </script>
 
+  <!-- ✅ Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js"></script>
+
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyD6DsOIARknAtMjK46YVza6spl77O9O5FE",
+      authDomain: "rs-sports-live.firebaseapp.com",
+      databaseURL: "https://rs-sports-live-default-rtdb.firebaseio.com",
+      projectId: "rs-sports-live",
+      storageBucket: "rs-sports-live.appspot.com",
+      messagingSenderId: "220170551322",
+      appId: "1:220170551322:web:dc511a89094b50fa1c51a3"
+    };
+
+    const app = firebase.initializeApp(firebaseConfig);
+    const database = firebase.database();
+
+    const countRef = database.ref("liveViewers");
+    const visitorId = Date.now().toString() + Math.floor(Math.random() * 1000);
+    const thisVisitorRef = countRef.child(visitorId);
+
+    thisVisitorRef.set(true);
+    thisVisitorRef.onDisconnect().remove();
+
+    countRef.on("value", (snapshot) => {
+      const count = snapshot.numChildren();
+      document.getElementById("visitorCount").innerText = "Live Viewers: " + count;
+    });
+  </script>
 </body>
 </html>
