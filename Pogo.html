@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Live Video with Viewer Count, Running Text, and Channel Info</title>
+  <link href="https://vjs.zencdn.net/8.5.2/video-js.css" rel="stylesheet" />
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      background-color: #000;
+      font-family: sans-serif;
+      padding: 24px 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .video-card {
+      width: 95%;
+      max-width: 1200px;
+      aspect-ratio: 16 / 9;
+      background: #000;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 0 15px 5px #00ff00cc;
+      position: relative;
+      transition: box-shadow 0.3s ease-in-out;
+    }
+
+    .video-card:hover {
+      box-shadow: 0 0 25px 10px #00ff00dd;
+    }
+
+    .video-js {
+      width: 100%;
+      height: 100%;
+    }
+
+    #loading-spinner {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 40px;
+      height: 40px;
+      border: 4px solid rgba(255, 255, 255, 0.3);
+      border-top: 4px solid #f44336;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      z-index: 10;
+    }
+
+    @keyframes spin {
+      0% { transform: translate(-50%, -50%) rotate(0deg); }
+      100% { transform: translate(-50%, -50%) rotate(360deg); }
+    }
+
+    .viewer-box {
+      margin-top: 10px;
+      background-color: #111;
+      padding: 4px 10px;
+      border-radius: 6px;
+      color: #0f0;
+      font-size: 14px;
+      box-shadow: 0 0 6px rgba(0, 255, 0, 0.3);
+      border: 1px solid rgba(0, 255, 0, 0.2);
+      max-width: fit-content;
+      text-align: center;
+      user-select: none;
+    }
+
+    .running-text {
+      margin-top: 16px;
+      max-width: 1200px;
+      width: 95%;
+      background-color: rgba(0, 0, 0, 0.6);
+      border-radius: 6px;
+      border: 1px solid rgba(0, 255, 0, 0.2);
+      box-shadow: 0 0 10px rgba(0, 255, 0, 0.3);
+      overflow: hidden;
+      position: relative;
+      height: 30px;
+      user-select: none;
+    }
+
+    .running-text span {
+      display: inline-block;
+      color: #0f0;
+      font-size: 18px;
+      white-space: nowrap;
+      padding-left: 100%;
+      animation: scrollText 15s linear infinite;
+      text-shadow: 0 0 10px #00ff00, 0 0 20px #00ff00;
+      line-height: 30px;
+    }
+
+    @keyframes scrollText {
+      0% { transform: translateX(0%); }
+      100% { transform: translateX(-100%); }
+    }
+
+    .channel-info {
+      margin-top: 12px;
+      max-width: 1200px;
+      width: 95%;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: #0f0;
+      user-select: none;
+      box-shadow: 0 0 10px rgba(0, 255, 0, 0.3);
+      padding: 6px 12px;
+      border-radius: 8px;
+      background-color: rgba(0, 0, 0, 0.6);
+      border: 1px solid rgba(0, 255, 0, 0.2);
+      font-weight: 600;
+      font-size: 18px;
+    }
+
+    .channel-logo {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      object-fit: cover;
+      box-shadow: 0 0 8px #00ff00;
+    }
+
+    .channel-name {
+      white-space: nowrap;
+    }
+
+    /* 📌 Ad block style */
+    .ad-box {
+      margin-top: 16px;
+      width: 95%;
+      max-width: 1200px;
+      min-height: 60px;
+    }
+
+    /* 📌 Telegram Icon bottom right */
+    .telegram-icon {
+      position: fixed;
+      bottom: 16px;
+      right: 16px;
+      z-index: 999;
+    }
+
+    .telegram-icon a {
+      display: flex;
+      align-items: center;
+      background-color: #0088cc;
+      padding: 10px 14px;
+      border-radius: 50px;
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+      box-shadow: 0 0 12px #00aaffcc;
+      transition: 0.3s;
+    }
+
+    .telegram-icon a:hover {
+      background-color: #0077b5;
+    }
+
+    .telegram-icon img {
+      width: 20px;
+      height: 20px;
+      margin-right: 6px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="video-card">
+    <div id="loading-spinner"></div>
+    <video id="my-video" class="video-js vjs-default-skin" controls autoplay muted playsinline>
+      <source src="https://amg01448-samsungin-pogo-samsungin-dzccl.amagi.tv/playlist/amg01448-samsungin-pogo-samsungin/playlist.m3u8" type="application/x-mpegURL" />
+      আপনার ব্রাউজার এই ভিডিও ফরম্যাট সাপোর্ট করে না।
+    </video>
+  </div>
+
+  <div class="viewer-box" id="visitorCount">Live Viewers: 0</div>
+
+  <div class="running-text">
+    <span> POGO TV</span>
+  </div>
+
+  <div class="channel-info">
+    <img src="https://imgur.com/DJSZ3Zx.jpeg" alt="Channel Logo" class="channel-logo" />
+    <span class="channel-name">Pogo TV (HD) Live</span>
+  </div>
+
+  <!-- ✅ Ad Section -->
+  <div class="ad-box">
+    <script async="async" data-cfasync="false" src="//pl26276034.profitableratecpm.com/5c56eb7e6c3af0d348b7ea96ec3c5820/invoke.js"></script>
+    <div id="container-5c56eb7e6c3af0d348b7ea96ec3c5820"></div>
+  </div>
+
+  <!-- ✅ Telegram Icon -->
+  <div class="telegram-icon">
+    <a href="https://t.me/yourusername" target="_blank">
+      <img src="https://cdn-icons-png.flaticon.com/512/2111/2111646.png" alt="Telegram Icon" />
+      Telegram
+    </a>
+  </div>
+
+  <script src="https://vjs.zencdn.net/8.5.2/video.min.js"></script>
+  <script>
+    const player = videojs('my-video');
+    const spinner = document.getElementById('loading-spinner');
+
+    spinner.style.display = 'block';
+
+    player.ready(() => spinner.style.display = 'none');
+    player.on('waiting', () => spinner.style.display = 'block');
+    player.on('playing', () => spinner.style.display = 'none');
+    player.on('error', () => {
+      spinner.style.display = 'none';
+      console.error('Video error:', player.error());
+    });
+  </script>
+
+  <!-- ✅ Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js"></script>
+
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyD6DsOIARknAtMjK46YVza6spl77O9O5FE",
+      authDomain: "rs-sports-live.firebaseapp.com",
+      databaseURL: "https://rs-sports-live-default-rtdb.firebaseio.com",
+      projectId: "rs-sports-live",
+      storageBucket: "rs-sports-live.appspot.com",
+      messagingSenderId: "220170551322",
+      appId: "1:220170551322:web:dc511a89094b50fa1c51a3"
+    };
+
+    const app = firebase.initializeApp(firebaseConfig);
+    const database = firebase.database();
+
+    const countRef = database.ref("liveViewers");
+    const visitorId = Date.now().toString() + Math.floor(Math.random() * 1000);
+    const thisVisitorRef = countRef.child(visitorId);
+
+    thisVisitorRef.set(true);
+    thisVisitorRef.onDisconnect().remove();
+
+    countRef.on("value", (snapshot) => {
+      const count = snapshot.numChildren();
+      document.getElementById("visitorCount").innerText = "Live Viewers: " + count;
+    });
+  </script>
+</body>
+</html>
