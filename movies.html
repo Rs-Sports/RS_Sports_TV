@@ -1,395 +1,321 @@
-<meta name='viewport' content='width=device-width, initial-scale=1'/><!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="bn">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>RS Movie Shop</title>
+  <title>সিনেমা প্লে</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
   <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
-      margin: 0;
       font-family: sans-serif;
-      background-color: #000;
-      color: #fff;
-    }
-
-    .video-container {
-      width: 100%;
-      max-width: 900px;
-      aspect-ratio: 16 / 9;
-      position: relative;
-      border-radius: 20px;
-      overflow: hidden;
-      box-shadow: 0 0 25px 5px limegreen;
-      border: 2px solid #00ff00;
-      background: linear-gradient(145deg, #0a0a0a, #1a1a1a);
-      margin: 20px auto;
-      cursor: pointer;
-    }
-
-    .video-container video {
-      width: 100%;
-      height: 100%;
-      display: block;
-      border-radius: 20px;
-      background: black;
-    }
-
-    .live-badge {
-      position: absolute;
-      top: 10px;
-      left: 10px;
-      background: red;
-      color: white;
-      padding: 3px 8px;
-      font-weight: bold;
-      border-radius: 4px;
-      font-size: 14px;
-      box-shadow: 0 0 8px #ff0000;
-      z-index: 10;
-      user-select: none;
-    }
-
-    .skip-btn {
-      position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
-      background-color: rgba(50, 205, 50, 0.6);
-      color: black;
-      font-weight: bold;
-      border: none;
-      padding: 15px 25px;
-      border-radius: 30px;
-      cursor: pointer;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.3s ease;
-      user-select: none;
-      z-index: 20;
-      font-size: 18px;
-      box-shadow: 0 0 8px limegreen;
-      user-select: none;
-    }
-
-    #skipBackBtn {
-      left: 20px;
-    }
-
-    #skipForwardBtn {
-      right: 20px;
-    }
-
-    .skip-btn.show {
-      opacity: 1;
-      pointer-events: auto;
-    }
-
-    .running-text {
-      background: #111;
-      color: #0f0;
-      padding: 10px;
-      overflow: hidden;
-      white-space: nowrap;
-      max-width: 900px;
-      margin: 0 auto;
-      border-radius: 10px;
-      box-shadow: 0 0 10px limegreen;
-      user-select: none;
-    }
-
-    .running-text span {
-      display: inline-block;
-      animation: scroll 12s linear infinite;
-    }
-
-    @keyframes scroll {
-      0% { transform: translateX(100%); }
-      100% { transform: translateX(-100%); }
-    }
-
-    .section-header {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      text-align: center;
-      margin: 20px auto;
-      font-size: 18px;
-      font-weight: bold;
-      text-shadow: 0 0 10px lime;
-      padding: 8px 20px;
-      background-color: rgba(0, 255, 0, 0.1);
-      border-radius: 30px;
-      box-shadow: 0 0 10px limegreen;
-      user-select: none;
-      max-width: 900px;
-    }
-
-    .section-header span {
-      display: inline-block;
-      animation: colorShift 3s linear infinite;
-      font-size: 18px;
-    }
-
-    @keyframes colorShift {
-      0%, 100% { color: red; }
-      20% { color: orange; }
-      40% { color: yellow; }
-      60% { color: green; }
-      80% { color: blue; }
-    }
-
-    .playlist-grid {
-      width: 95%;
-      max-width: 900px;
-      margin: 30px auto;
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 20px;
-    }
-
-    .playlist-item {
-      background: #111;
-      border: 2px solid #0f0;
-      border-radius: 10px;
-      overflow: hidden;
-      cursor: pointer;
-      transition: 0.3s;
-      text-align: center;
+      background: #121212;
+      color: #eee;
+      height: 100vh;
       display: flex;
       flex-direction: column;
+      overflow: hidden;
     }
 
-    .playlist-item:hover {
-      transform: scale(1.03);
+    .top-fixed {
+      flex-shrink: 0;
+      position: sticky;
+      top: 0;
+      background: #121212;
+      z-index: 100;
     }
 
-    .playlist-item img {
+    .slider-container, .video-container {
       width: 100%;
-      aspect-ratio: 9 / 13;
-      object-fit: cover;
-      border-bottom: 1px solid #0f0;
+      max-width: 800px;
+      aspect-ratio: 16/9;
+      margin: 10px auto 0;
+      border-radius: 12px;
+      overflow: hidden;
+      background: #000;
+      box-shadow: 0 4px 15px rgba(0, 255, 0, 0.4);
     }
 
-    .playlist-item span {
+    .swiper, video { width: 100%; height: 100%; }
+    .swiper-slide { display: flex; align-items: center; justify-content: center; }
+    .swiper-slide img { width: 100%; height: 100%; object-fit: contain; }
+
+    .hidden { display: none; }
+
+    .category-tabs {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin: 10px auto 5px;
       padding: 10px;
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(8px);
+      border-radius: 30px;
+      max-width: 800px;
+    }
+
+    .category-tab {
+      padding: 8px 18px;
+      background: rgba(255, 255, 255, 0.08);
+      color: #ccc;
+      border-radius: 20px;
+      font-size: 14px;
+      border: 1px solid rgba(255,255,255,0.1);
+      cursor: pointer;
+      transition: 0.3s ease;
+      font-weight: 500;
+    }
+
+    .category-tab.active {
+      background: #ff5722;
+      color: #fff;
+      box-shadow: 0 0 10px #ff5722;
+      transform: scale(1.05);
+    }
+
+    .grid-title-fixed {
+      text-align: center;
+      font-size: 20px;
+      background: #1e1e1e;
+      padding: 10px 20px;
+      margin: 10px auto 0;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+      position: sticky;
+      top: 140px;
+      z-index: 90;
+      max-width: 300px;
+    }
+
+    .scroll-area {
+      flex: 1;
+      overflow-y: auto;
+      padding: 10px 10px 80px;
+    }
+
+    .grid-section {
+      max-width: 800px;
+      margin: auto;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-top: 15px;
+    }
+
+    .card {
+      position: relative;
+      height: 200px;
+      border-radius: 10px;
+      overflow: hidden;
+      background: #1e1e1e;
+      cursor: pointer;
+      transition: transform 0.2s ease;
+      box-shadow: 0 2px 8px rgba(255,255,255,0.1);
+    }
+
+    .card:hover {
+      transform: scale(1.05);
+      box-shadow: 0 4px 15px rgba(255,255,255,0.3);
+    }
+
+    .card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 10px;
+    }
+
+    .card-title {
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+      background: rgba(0,0,0,0.6);
+      color: #eee;
+      text-align: center;
+      padding: 6px 5px;
+      font-weight: 600;
       font-size: 16px;
+      border-bottom-left-radius: 10px;
+      border-bottom-right-radius: 10px;
+      user-select: none;
     }
+  </style>
+</head>
+<body>
 
-    .social-contact {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      z-index: 1000;
-    }
+  <!-- ==== Fixed Top Section ==== -->
+  <div class="top-fixed">
+    <div id="sliderBox" class="slider-container">
+      <div class="swiper">
+        <div class="swiper-wrapper">
+          <div class="swiper-slide"><img src="https://imgur.com/b6y8Auu.jpeg" alt="Banner 1"></div>
+          <div class="swiper-slide"><img src="https://imgur.com/6COcj3K.jpeg" alt="Banner 2"></div>
+          <div class="swiper-slide"><img src="https://imgur.com/IieAo7I.jpeg" alt="Banner 3"></div>
+        </div>
+        <div class="swiper-pagination"></div>
+        <div class="swiper-button-prev"></div>
+        <div class="swiper-button-next"></div>
+      </div>
+    </div>
 
-    .social-contact a img {
-      width: 50px;
-      height: 50px;
-      margin: 5px;
-      border-radius: 50%;
-      box-shadow: 0 0 10px limegreen;
-      transition: transform 0.3s ease;
-    }
+    <div id="videoBox" class="video-container hidden">
+      <video id="videoPlayer" controls playsinline controlslist="nodownload" oncontextmenu="return false">
+        <source id="videoSource" src="" type="video/mp4" ></source>
+        আপনার ব্রাউজারে ভিডিও চলেনা।
+      </video>
+    </div>
 
-    .social-contact a img:hover {
-      transform: scale(1.1);
-    }
+    <div class="category-tabs">
+      <button class="category-tab active" onclick="showCategory('movie', event)">বাংলা মুভি</button>
+      <button class="category-tab" onclick="showCategory('trending', event)">ট্রেন্ডিং</button>
+      <button class="category-tab" onclick="showCategory('dubbed', event)">হিন্দি মুভি</button>
+    </div>
 
-    @media (max-width: 768px) {
-      .playlist-grid {
-        grid-template-columns: repeat(2, 1fr);
+    <div class="grid-title-fixed">🎬 মুভি এবং নাটক</div>
+  </div>
+
+  <!-- ==== Scrollable Playlist ==== -->
+  <div class="scroll-area">
+    <div class="grid-section">
+
+      <!-- Movie Category -->
+<div class="category-grid" id="movie">
+  <div class="grid">
+    <div class="card" onclick="playVideo('https://pixeldrain.com/api/file/Z8L4pu8b')">
+      <img src="https://imgur.com/2v1kL9Y.jpeg" />
+      <div class="card-title">কানাগলি</div>
+    </div>
+    <div class="card" onclick="playVideo('https://pixeldrain.com/api/file/1yqAyg7r')">
+      <img src="https://imgur.com/yiyEu6s.jpeg" />
+      <div class="card-title">চক্কর</div>
+    </div>
+    <div class="card" onclick="playVideo('https://pixeldrain.com/api/file/FoVGdTSt')">
+      <img src="https://imgur.com/WTijkOc.jpeg" />
+      <div class="card-title">মহানগর</div>
+    </div>
+    <div class="card" onclick="playVideo('https://pixeldrain.com/api/file/demo1')">
+      <img src="https://imgur.com/Demo1.jpeg" />
+      <div class="card-title">আরেকটা মুভি</div>
+    </div>
+    <div class="card" onclick="playVideo('https://pixeldrain.com/api/file/demo2')">
+      <img src="https://imgur.com/Demo2.jpeg" />
+      <div class="card-title">পঞ্চম মুভি</div>
+    </div>
+    <div class="card" onclick="playVideo('https://pixeldrain.com/api/file/demo3')">
+      <img src="https://imgur.com/Demo3.jpeg" />
+      <div class="card-title">ষষ্ঠ মুভি</div>
+    </div>
+  </div>
+</div>
+
+<!-- Trending Category -->
+<div class="category-grid hidden" id="trending">
+  <div class="grid">
+    <div class="card" onclick="playVideo('https://pixeldrain.com/api/file/NL7dgzDS')">
+      <img src="https://imgur.com/xECuGPV.jpeg" />
+      <div class="card-title">মুভি ১</div>
+    </div>
+    <div class="card" onclick="playVideo('https://pixeldrain.com/api/file/6v3pnmuY')">
+      <img src="https://imgur.com/b4Q6izq.jpeg" />
+      <div class="card-title">হাউ সুইট</div>
+    </div>
+    <div class="card" onclick="playVideo('https://www.w3schools.com/html/mov_bbb.mp4')">
+      <img src="https://imgur.com/xECuGPV.jpeg" />
+      <div class="card-title">মুভি ৩</div>
+    </div>
+    <div class="card" onclick="playVideo('https://pixeldrain.com/api/file/demo4')">
+      <img src="https://imgur.com/demo4.jpeg" />
+      <div class="card-title">মুভি ৪</div>
+    </div>
+    <div class="card" onclick="playVideo('https://pixeldrain.com/api/file/demo5')">
+      <img src="https://imgur.com/demo5.jpeg" />
+      <div class="card-title">মুভি ৫</div>
+    </div>
+    <div class="card" onclick="playVideo('https://pixeldrain.com/api/file/demo6')">
+      <img src="https://imgur.com/demo6.jpeg" />
+      <div class="card-title">মুভি ৬</div>
+    </div>
+  </div>
+</div>
+
+<!-- Dubbed Category -->
+<div class="category-grid hidden" id="dubbed">
+  <div class="grid">
+    <div class="card" onclick="playVideo('https://pixeldrain.com/api/file/BY1jTRFH')">
+      <img src="https://imgur.com/ybif4pi.jpeg" />
+      <div class="card-title">Vikrant Rona</div>
+    </div>
+    <div class="card" onclick="playVideo('https://pixeldrain.com/api/file/wYdqR5fy')">
+      <img src="https://imgur.com/B4e1VGg.jpeg" />
+      <div class="card-title">Good Bad</div>
+    </div>
+    <div class="card" onclick="playVideo('https://pixeldrain.com/api/file/pLuwqi8g')">
+      <img src="https://imgur.com/xenqcjT.jpeg" />
+      <div class="card-title">Viduthalai</div>
+    </div>
+    <div class="card" onclick="playVideo('https://pixeldrain.com/api/file/AvosQXVr')">
+      <img src="https://imgur.com/umOCAEg.jpeg" />
+      <div class="card-title">ROBINHOOD</div>
+    </div>
+    <div class="card" onclick="playVideo('https://pixeldrain.com/api/file/iDAFfvWs')">
+      <img src="https://imgur.com/cHxYDmw.jpeg" />
+      <div class="card-title">BHAIRAVAM</div>
+    </div>
+    <div class="card" onclick="playVideo('https://pixeldrain.com/api/file/demo9')">
+      <img src="https://imgur.com/demo9.jpeg" />
+      <div class="card-title">মুভি ৬</div>
+    </div>
+  </div>
+</div>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+  <script>
+    const tabs = document.querySelectorAll(".category-tab");
+
+    function showCategory(id, event) {
+      const allSections = document.querySelectorAll(".category-grid");
+      allSections.forEach(section => section.classList.add("hidden"));
+
+      const selected = document.getElementById(id);
+      if (selected) {
+        selected.classList.remove("hidden");
+      }
+
+      tabs.forEach(btn => btn.classList.remove("active"));
+      if (event && event.target) {
+        event.target.classList.add("active");
       }
     }
 
-    button.load-more-btn {
-      padding: 10px 20px;
-      background: limegreen;
-      color: black;
-      font-weight: bold;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      box-shadow: 0 0 10px lime;
-      margin: 20px auto 40px auto;
-      display: block;
+    const videoBox = document.getElementById("videoBox");
+    const sliderBox = document.getElementById("sliderBox");
+    const player = document.getElementById("videoPlayer");
+
+    function playVideo(url) {
+      sliderBox.classList.add("hidden");
+      videoBox.classList.remove("hidden");
+      player.src = url;
+      player.load();
+      player.play();
     }
 
-    button.load-more-btn:hover {
-      background: #32cd32;
-    }
-  
-.play-icon {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 60px;
-  height: 60px;
-  background: url('https://cdn-icons-png.flaticon.com/512/727/727245.png') no-repeat center center / contain;
-  opacity: 0;
-  transition: opacity 0.3s ease;
-  pointer-events: none;
-}
-
-.playlist-item {
-  position: relative;
-}
-
-.playlist-item:hover .play-icon {
-  opacity: 1;
-}
-
-</style>
-</head>
-<body>
-  <div class="video-container" id="videoContainer" tabindex="0">
-    <div class="live-badge">LIVE</div>
-    <video id="mainVideo" controls poster="https://imgur.com/UFpRJGw.jpeg">
-      <source id="videoSource" src="" type="video/mp4" />
-      আপনার ব্রাউজার ভিডিও প্লে করতে পারছে না।
-    </video>
-
-    <button id="skipBackBtn" class="skip-btn" title="Skip Back 10 seconds">&lt; -10s</button>
-    <button id="skipForwardBtn" class="skip-btn" title="Skip Forward 10 seconds">+10s &gt;</button>
-  </div>
-
-  <div class="running-text">
-    <span>এই মুহূর্তে সরাসরি সম্প্রচার চলছে... নতুন খবর দেখতে নিচে দেখুন...</span>
-  </div>
-
-  <div class="section-header">
-    <h2 style="margin: 0 auto;">
-      <span>A</span><span>L</span><span>L</span> <span>M</span><span>O</span><span>V</span><span>I</span><span>E</span><span>S</span>
-    </h2>
-  </div>
-
-  <div class="playlist-grid" id="playlistGrid">
-    <div class="playlist-item" onclick="playVideo('https://pixeldrain.com/api/file/pLuwqi8g', 'https://imgur.com/UFpRJGw.jpeg')">
-      <img src="https://imgur.com/kRueFNk.jpeg" alt="ভিডিও ১" />
-      <span>Viduthalai</span>
-    </div>
-    <div class="playlist-item" onclick="playVideo('https://pixeldrain.com/api/file/wYdqR5fy', 'https://imgur.com/UFpRJGw.jpeg')">
-      <img src="https://imgur.com/jswLCcC.jpeg" alt="ভিডিও ২" />
-      <span>Good Bad(Hindi) Movies</span>
-    </div>
-    <div class="playlist-item" onclick="playVideo('video3.mp4', 'poster3.jpg')">
-      <img src="https://imgur.com/yA83Esn.jpg" alt="ভিডিও ৩" />
-      <span>ভিডিও ৩</span>
-    </div>
-    <div class="playlist-item" onclick="playVideo('https://pixeldrain.com/api/file/wYdqR5fy', 'https://imgur.com/yA83Esn.jpg')">
-      <img src="https://imgur.com/UFpRJGw.jpeg" alt="ভিডিও ৪" />
-      <span>ভিডিও ৪</span>
-    </div>
-    <div class="playlist-item" onclick="playVideo('video2.mp4', 'poster2.jpg')">
-      <img src="https://imgur.com/yA83Esn.jpg" alt="ভিডিও ৫" />
-      <span>ভিডিও ৫</span>
-    </div>
-    <div class="playlist-item" onclick="playVideo('video3.mp4', 'poster3.jpg')">
-      <img src="https://imgur.com/yA83Esn.jpg" alt="ভিডিও ৬" />
-      <span>ভিডিও ৬</span>
-    </div>
-<div class="playlist-item" onclick="playVideo('https://pixeldrain.com/api/file/pLuwqi8g', 'https://imgur.com/UFpRJGw.jpeg')">
-      <img src="https://imgur.com/kRueFNk.jpeg" alt="ভিডিও ১" />
-      <span>ভিডিও ১</span>
-    </div>
-    <div class="playlist-item" onclick="playVideo('https://pixeldrain.com/api/file/wYdqR5fy', 'https://imgur.com/UFpRJGw.jpeg')">
-      <img src="https://imgur.com/yA83Esn.jpg" alt="ভিডিও ২" />
-      <span>ভিডিও ২</span>
-    </div>
-    <div class="playlist-item" onclick="playVideo('video3.mp4', 'poster3.jpg')">
-      <img src="https://imgur.com/yA83Esn.jpg" alt="ভিডিও ৩" />
-      <span>ভিডিও ৩</span>
-    </div>
-    <div class="playlist-item" onclick="playVideo('https://pixeldrain.com/api/file/wYdqR5fy', 'https://imgur.com/yA83Esn.jpg')">
-      <img src="https://imgur.com/yA83Esn.jpg" alt="ভিডিও ৪" />
-      <span>ভিডিও ৪</span>
-    </div>
-    <div class="playlist-item" onclick="playVideo('video2.mp4', 'poster2.jpg')">
-      <img src="https://imgur.com/yA83Esn.jpg" alt="ভিডিও ৫" />
-      <span>ভিডিও ৫</span>
-    </div>
-    <div class="playlist-item" onclick="playVideo('video3.mp4', 'poster3.jpg')">
-      <img src="https://imgur.com/yA83Esn.jpg" alt="ভিডিও ৬" />
-      <span>ভিডিও ৬</span>
-    </div>
-  </div>
-
-  <button class="load-more-btn" onclick="loadMore(event)">Load More</button>
-
-  <div class="social-contact">
-    <a href="https://t.me/rsmovieshop" target="_blank" rel="noopener noreferrer" title="Telegram">
-      <img src="https://cdn-icons-png.flaticon.com/512/2111/2111646.png" alt="Telegram" />
-    </a>
-  </div>
-
-  <footer style="text-align: center; padding: 20px; background: #111; color: #0f0; font-size: 14px; box-shadow: 0 -1px 5px limegreen;">
-    &copy; 2025 RS Movie Shop | Developed with love by RS Team
-  </footer>
-
-  <script>
-    
-  let adShown = false;
-  let pendingVideoSrc = "";
-  let pendingPoster = "";
-
-  function playVideo(src, poster) {
-    if (!adShown) {
-      adShown = true;
-      pendingVideoSrc = src;
-      pendingPoster = poster;
-      window.open("https://your-ad-link.com", "_blank"); // <-- এখানে অ্যাড লিংক বসাও
-      return;
-    }
-
-    const video = document.getElementById('mainVideo');
-    const source = document.getElementById('videoSource');
-    video.pause();
-    source.src = src;
-    video.poster = poster;
-    video.load();
-    video.play();
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-
-    // reset ad logic for future clicks
-    adShown = false;
-  }
-
-    const skipBackBtn = document.getElementById('skipBackBtn');
-    const skipForwardBtn = document.getElementById('skipForwardBtn');
-    const videoContainer = document.getElementById('videoContainer');
-
-    skipBackBtn.addEventListener('click', e => {
-      e.stopPropagation();
-      const video = document.getElementById('mainVideo');
-      video.currentTime = Math.max(0, video.currentTime - 10);
+    player.addEventListener("ended", () => {
+      videoBox.classList.add("hidden");
+      sliderBox.classList.remove("hidden");
+      player.src = "";
     });
 
-    skipForwardBtn.addEventListener('click', e => {
-      e.stopPropagation();
-      const video = document.getElementById('mainVideo');
-      video.currentTime = Math.min(video.duration, video.currentTime + 10);
-    });
-
-    let skipTimeout;
-
-    function showSkipButtons() {
-      skipBackBtn.classList.add('show');
-      skipForwardBtn.classList.add('show');
-      clearTimeout(skipTimeout);
-      skipTimeout = setTimeout(() => {
-        skipBackBtn.classList.remove('show');
-        skipForwardBtn.classList.remove('show');
-      }, 3000);
-    }
-
-    videoContainer.addEventListener('click', () => {
-      if (skipBackBtn.classList.contains('show')) {
-        clearTimeout(skipTimeout);
-        skipTimeout = setTimeout(() => {
-          skipBackBtn.classList.remove('show');
-          skipForwardBtn.classList.remove('show');
-        }, 3000);
-      } else {
-        showSkipButtons();
+    new Swiper('.swiper', {
+      loop: true,
+      autoplay: { delay: 3000 },
+      pagination: { el: '.swiper-pagination', clickable: true },
+      navigation: {
+        nextEl: '.swiper-button-next',
+        prevEl: '.swiper-button-prev'
       }
     });
   </script>
