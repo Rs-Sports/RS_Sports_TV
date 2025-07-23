@@ -73,6 +73,32 @@
       transform: scale(1.05);
     }
 
+    /* Search box container */
+    .search-container {
+      max-width: 800px;
+      margin: 0 auto 10px;
+      text-align: center;
+    }
+
+    /* Search input */
+    #searchInput {
+      width: 60%;
+      max-width: 400px;
+      padding: 8px 15px;
+      border-radius: 20px;
+      border: none;
+      outline: none;
+      font-size: 14px;
+      box-shadow: 0 2px 8px rgba(255,255,255,0.1);
+      background: #222;
+      color: #eee;
+      transition: box-shadow 0.3s ease;
+    }
+
+    #searchInput:focus {
+      box-shadow: 0 2px 12px rgba(255,87,34,0.7);
+    }
+
     .grid-title-fixed {
       text-align: center;
       font-size: 20px;
@@ -82,7 +108,7 @@
       border-radius: 10px;
       box-shadow: 0 4px 12px rgba(0,0,0,0.4);
       position: sticky;
-      top: 140px;
+      top: 190px; /* Adjusted to leave space for search box */
       z-index: 90;
       max-width: 300px;
     }
@@ -169,9 +195,14 @@
     </div>
 
     <div class="category-tabs">
-      <button class="category-tab active" onclick="showCategory('movie', event)">বাংলা মুভি</button>
-      <button class="category-tab" onclick="showCategory('trending', event)">ট্রেন্ডিং</button>
-      <button class="category-tab" onclick="showCategory('dubbed', event)">হিন্দি মুভি</button>
+      <button class="category-tab active" data-category="movie" onclick="showCategory('movie', event)">বাংলা মুভি</button>
+      <button class="category-tab" data-category="trending" onclick="showCategory('trending', event)">ট্রেন্ডিং</button>
+      <button class="category-tab" data-category="dubbed" onclick="showCategory('dubbed', event)">হিন্দি মুভি</button>
+    </div>
+
+    <!-- Search Box -->
+    <div class="search-container">
+      <input type="text" id="searchInput" placeholder="সার্চ করুন..." oninput="performSearch()" />
     </div>
 
     <div class="grid-title-fixed">🎬 মুভি এবং নাটক</div>
@@ -182,94 +213,94 @@
     <div class="grid-section">
 
       <!-- Movie Category -->
-<div class="category-grid" id="movie">
-  <div class="grid">
-    <div class="card" onclick="playVideoWithAd('https://pixeldrain.com/api/file/Z8L4pu8b')">
-      <img src="https://imgur.com/2v1kL9Y.jpeg" />
-      <div class="card-title">কানাগলি</div>
-    </div>
-    <div class="card" onclick="playVideoWithAd('https://pixeldrain.com/api/file/1yqAyg7r')">
-      <img src="https://imgur.com/yiyEu6s.jpeg" />
-      <div class="card-title">চক্কর</div>
-    </div>
-    <div class="card" onclick="playVideoWithAd('https://pixeldrain.com/api/file/FoVGdTSt')">
-      <img src="https://imgur.com/WTijkOc.jpeg" />
-      <div class="card-title">মহানগর</div>
-    </div>
-    <div class="card" onclick="playVideoWithAd('https://pixeldrain.com/api/file/demo1')">
-      <img src="https://imgur.com/Demo1.jpeg" />
-      <div class="card-title">আরেকটা মুভি</div>
-    </div>
-    <div class="card" onclick="playVideoWithAd('https://pixeldrain.com/api/file/demo2')">
-      <img src="https://imgur.com/Demo2.jpeg" />
-      <div class="card-title">পঞ্চম মুভি</div>
-    </div>
-    <div class="card" onclick="playVideoWithAd('https://pixeldrain.com/api/file/demo3')">
-      <img src="https://imgur.com/Demo3.jpeg" />
-      <div class="card-title">ষষ্ঠ মুভি</div>
-    </div>
-  </div>
-</div>
+      <div class="category-grid" id="movie">
+        <div class="grid">
+          <div class="card" onclick="playVideoWithAd('https://pixeldrain.com/api/file/Z8L4pu8b')">
+            <img src="https://imgur.com/2v1kL9Y.jpeg" />
+            <div class="card-title">কানাগলি</div>
+          </div>
+          <div class="card" onclick="playVideoWithAd('https://pixeldrain.com/api/file/1yqAyg7r')">
+            <img src="https://imgur.com/yiyEu6s.jpeg" />
+            <div class="card-title">চক্কর</div>
+          </div>
+          <div class="card" onclick="playVideoWithAd('https://pixeldrain.com/api/file/FoVGdTSt')">
+            <img src="https://imgur.com/WTijkOc.jpeg" />
+            <div class="card-title">মহানগর</div>
+          </div>
+          <div class="card" onclick="playVideoWithAd('https://pixeldrain.com/api/file/demo1')">
+            <img src="https://imgur.com/Demo1.jpeg" />
+            <div class="card-title">আরেকটা মুভি</div>
+          </div>
+          <div class="card" onclick="playVideoWithAd('https://pixeldrain.com/api/file/demo2')">
+            <img src="https://imgur.com/Demo2.jpeg" />
+            <div class="card-title">পঞ্চম মুভি</div>
+          </div>
+          <div class="card" onclick="playVideoWithAd('https://pixeldrain.com/api/file/demo3')">
+            <img src="https://imgur.com/Demo3.jpeg" />
+            <div class="card-title">ষষ্ঠ মুভি</div>
+          </div>
+        </div>
+      </div>
 
-<!-- Trending Category -->
-<div class="category-grid hidden" id="trending">
-  <div class="grid">
-    <div class="card" onclick="playVideoWithAd('https://pixeldrain.com/api/file/NL7dgzDS')">
-      <img src="https://imgur.com/xECuGPV.jpeg" />
-      <div class="card-title">মুভি ১</div>
-    </div>
-    <div class="card" onclick="playVideoWithAd('https://pixeldrain.com/api/file/6v3pnmuY')">
-      <img src="https://imgur.com/b4Q6izq.jpeg" />
-      <div class="card-title">হাউ সুইট</div>
-    </div>
-    <div class="card" onclick="playVideoWithAd('https://www.w3schools.com/html/mov_bbb.mp4')">
-      <img src="https://imgur.com/xECuGPV.jpeg" />
-      <div class="card-title">মুভি ৩</div>
-    </div>
-    <div class="card" onclick="playVideoWithAd('https://pixeldrain.com/api/file/demo4')">
-      <img src="https://imgur.com/demo4.jpeg" />
-      <div class="card-title">মুভি ৪</div>
-    </div>
-    <div class="card" onclick="playVideoWithAd('https://pixeldrain.com/api/file/demo5')">
-      <img src="https://imgur.com/demo5.jpeg" />
-      <div class="card-title">মুভি ৫</div>
-    </div>
-    <div class="card" onclick="playVideoWithAd('https://pixeldrain.com/api/file/demo6')">
-      <img src="https://imgur.com/demo6.jpeg" />
-      <div class="card-title">মুভি ৬</div>
-    </div>
-  </div>
-</div>
+      <!-- Trending Category -->
+      <div class="category-grid hidden" id="trending">
+        <div class="grid">
+          <div class="card" onclick="playVideoWithAd('https://pixeldrain.com/api/file/NL7dgzDS')">
+            <img src="https://imgur.com/xECuGPV.jpeg" />
+            <div class="card-title">মুভি ১</div>
+          </div>
+          <div class="card" onclick="playVideoWithAd('https://pixeldrain.com/api/file/6v3pnmuY')">
+            <img src="https://imgur.com/b4Q6izq.jpeg" />
+            <div class="card-title">হাউ সুইট</div>
+          </div>
+          <div class="card" onclick="playVideoWithAd('https://www.w3schools.com/html/mov_bbb.mp4')">
+            <img src="https://imgur.com/xECuGPV.jpeg" />
+            <div class="card-title">মুভি ৩</div>
+          </div>
+          <div class="card" onclick="playVideoWithAd('https://pixeldrain.com/api/file/demo4')">
+            <img src="https://imgur.com/demo4.jpeg" />
+            <div class="card-title">মুভি ৪</div>
+          </div>
+          <div class="card" onclick="playVideoWithAd('https://pixeldrain.com/api/file/demo5')">
+            <img src="https://imgur.com/demo5.jpeg" />
+            <div class="card-title">মুভি ৫</div>
+          </div>
+          <div class="card" onclick="playVideoWithAd('https://pixeldrain.com/api/file/demo6')">
+            <img src="https://imgur.com/demo6.jpeg" />
+            <div class="card-title">মুভি ৬</div>
+          </div>
+        </div>
+      </div>
 
-<!-- Dubbed Category -->
-<div class="category-grid hidden" id="dubbed">
-  <div class="grid">
-    <div class="card" onclick="playVideoWithAd('https://pixeldrain.com/api/file/BY1jTRFH')">
-      <img src="https://imgur.com/ybif4pi.jpeg" />
-      <div class="card-title">Vikrant Rona</div>
-    </div>
-    <div class="card" onclick="playVideoWithAd('https://pixeldrain.com/api/file/wYdqR5fy')">
-      <img src="https://imgur.com/B4e1VGg.jpeg" />
-      <div class="card-title">Good Bad</div>
-    </div>
-    <div class="card" onclick="playVideoWithAd('https://pixeldrain.com/api/file/pLuwqi8g')">
-      <img src="https://imgur.com/xenqcjT.jpeg" />
-      <div class="card-title">Viduthalai</div>
-    </div>
-    <div class="card" onclick="playVideoWithAd('https://pixeldrain.com/api/file/AvosQXVr')">
-      <img src="https://imgur.com/umOCAEg.jpeg" />
-      <div class="card-title">ROBINHOOD</div>
-    </div>
-    <div class="card" onclick="playVideoWithAd('https://pixeldrain.com/api/file/iDAFfvWs')">
-      <img src="https://imgur.com/cHxYDmw.jpeg" />
-      <div class="card-title">BHAIRAVAM</div>
-    </div>
-    <div class="card" onclick="playVideoWithAd('https://pixeldrain.com/api/file/demo9')">
-      <img src="https://imgur.com/demo9.jpeg" />
-      <div class="card-title">মুভি ৬</div>
-    </div>
-  </div>
-</div>
+      <!-- Dubbed Category -->
+      <div class="category-grid hidden" id="dubbed">
+        <div class="grid">
+          <div class="card" onclick="playVideoWithAd('https://pixeldrain.com/api/file/BY1jTRFH')">
+            <img src="https://imgur.com/ybif4pi.jpeg" />
+            <div class="card-title">Vikrant Rona</div>
+          </div>
+          <div class="card" onclick="playVideoWithAd('https://pixeldrain.com/api/file/wYdqR5fy')">
+            <img src="https://imgur.com/B4e1VGg.jpeg" />
+            <div class="card-title">Good Bad</div>
+          </div>
+          <div class="card" onclick="playVideoWithAd('https://pixeldrain.com/api/file/pLuwqi8g')">
+            <img src="https://imgur.com/xenqcjT.jpeg" />
+            <div class="card-title">Viduthalai</div>
+          </div>
+          <div class="card" onclick="playVideoWithAd('https://pixeldrain.com/api/file/AvosQXVr')">
+            <img src="https://imgur.com/umOCAEg.jpeg" />
+            <div class="card-title">ROBINHOOD</div>
+          </div>
+          <div class="card" onclick="playVideoWithAd('https://pixeldrain.com/api/file/iDAFfvWs')">
+            <img src="https://imgur.com/cHxYDmw.jpeg" />
+            <div class="card-title">BHAIRAVAM</div>
+          </div>
+          <div class="card" onclick="playVideoWithAd('https://pixeldrain.com/api/file/BiYHFQwY')">
+            <img src="https://imgur.com/h3gGUx6.jpeg" />
+            <div class="card-title">Saiyaara</div>
+          </div>
+        </div>
+      </div>
 
   <!-- Scripts -->
   <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
@@ -289,6 +320,10 @@
       if (event && event.target) {
         event.target.classList.add("active");
       }
+
+      // সার্চ বক্স ক্লিয়ার করো এবং সব কার্ড দেখাও
+      document.getElementById('searchInput').value = '';
+      clearSearch();
     }
 
     const videoBox = document.getElementById("videoBox");
@@ -326,6 +361,45 @@
         prevEl: '.swiper-button-prev'
       }
     });
+
+    // সার্চ ফাংশন
+    function performSearch() {
+      const query = document.getElementById('searchInput').value.toLowerCase().trim();
+
+      // খালি হলে সব কার্ড দেখাও
+      if (!query) {
+        clearSearch();
+        return;
+      }
+
+      // সক্রিয় ক্যাটাগরির id পেতে
+      const activeTab = document.querySelector('.category-tab.active');
+      if (!activeTab) return;
+
+      const activeCategoryId = activeTab.getAttribute('data-category');
+      if (!activeCategoryId) return;
+
+      const activeCategory = document.getElementById(activeCategoryId);
+      if (!activeCategory) return;
+
+      activeCategory.querySelectorAll('.card').forEach(card => {
+        const title = card.querySelector('.card-title').textContent.toLowerCase();
+        if (title.includes(query)) {
+          card.style.display = 'block';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    }
+
+    // সার্চ ক্লিয়ার করলে সব কার্ড দেখানোর ফাংশন
+    function clearSearch() {
+      document.querySelectorAll('.category-grid').forEach(section => {
+        section.querySelectorAll('.card').forEach(card => {
+          card.style.display = 'block';
+        });
+      });
+    }
   </script>
 </body>
 </html>
