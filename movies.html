@@ -330,13 +330,21 @@
     const sliderBox = document.getElementById("sliderBox");
     const player = document.getElementById("videoPlayer");
 
+    let adShown = false;
+
     function playVideoWithAd(url) {
-  sliderBox.classList.add("hidden");
-  videoBox.classList.remove("hidden");
-  player.src = url;
-  player.load();
-  player.play();
-}
+      if (!adShown) {
+        // প্রথম ক্লিকে বিজ্ঞাপন লিঙ্ক নতুন ট্যাবে খুলবে
+        window.open('https://www.profitableratecpm.com/hdkza3qzv?key=a7dccf049cbf829f60f8197705b9fc5c', '_blank');
+        adShown = true;
+        return; // ভিডিও চালাবে না
+      }
+      sliderBox.classList.add("hidden");
+      videoBox.classList.remove("hidden");
+      player.src = url;
+      player.load();
+      player.play();
+    }
 
     player.addEventListener("ended", () => {
       videoBox.classList.add("hidden");
