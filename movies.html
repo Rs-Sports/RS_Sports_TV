@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>𝐌𝐎𝐕𝐈𝐄'𝐬 𝐙𝐨𝐧𝐄</title>
+  <title>সিনেমা প্লে</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -227,17 +227,17 @@
             <img src="https://imgur.com/WTijkOc.jpeg" />
             <div class="card-title">মহানগর</div>
           </div>
-          <div class="card" onclick="playVideoWithAd('https://pixeldrain.com/api/file/demo1')">
-            <img src="https://imgur.com/Demo1.jpeg" />
-            <div class="card-title">আরেকটা মুভি</div>
+          <div class="card" onclick="playVideoWithAd('https://pub-74c2d8d03dab4db091fc2d64bfc18a81.r2.dev/Taandob.2025.1080p.WeB-DL.Bangladeshi.x264.AAC-SkymoviesHD.Dance.mkv')">
+            <img src="https://imgur.com/rRphxmJ.jpeg" />
+            <div class="card-title">Taandob</div>
           </div>
-          <div class="card" onclick="playVideoWithAd('https://pixeldrain.com/api/file/demo2')">
-            <img src="https://imgur.com/Demo2.jpeg" />
-            <div class="card-title">পঞ্চম মুভি</div>
+          <div class="card" onclick="playVideoWithAd('https://www.profitableratecpm.com/hdkza3qzv?key=a7dccf049cbf829f60f8197705b9fc5c')">
+            <img src="https://imgur.com/WvxoJZs.jpeg" />
+            <div class="card-title">Borbaad</div>
           </div>
-          <div class="card" onclick="playVideoWithAd('https://pixeldrain.com/api/file/demo3')">
-            <img src="https://imgur.com/Demo3.jpeg" />
-            <div class="card-title">ষষ্ঠ মুভি</div>
+          <div class="card" onclick="playVideoWithAd('https://www.profitableratecpm.com/hdkza3qzv?key=a7dccf049cbf829f60f8197705b9fc5c')">
+            <img src="https://imgur.com/85I8VvY.jpeg" />
+            <div class="card-title">Dagi</div>
           </div>
         </div>
       </div>
@@ -253,9 +253,9 @@
             <img src="https://imgur.com/b4Q6izq.jpeg" />
             <div class="card-title">হাউ সুইট</div>
           </div>
-          <div class="card" onclick="playVideoWithAd('https://www.w3schools.com/html/mov_bbb.mp4')">
-            <img src="https://imgur.com/xECuGPV.jpeg" />
-            <div class="card-title">মুভি ৩</div>
+          <div class="card" onclick="playVideoWithAd('https://time7517jg.rustimfahum.workers.dev/0:/ottbangla.store-Ghumpori%202025Bengali%20Chorki%20WEB-DL.mkv')">
+            <img src="https://imgur.com/JqRE7DA.jpeg" />
+            <div class="card-title">ঘুমপরী</div>
           </div>
           <div class="card" onclick="playVideoWithAd('https://pixeldrain.com/api/file/demo4')">
             <img src="https://imgur.com/demo4.jpeg" />
@@ -330,21 +330,13 @@
     const sliderBox = document.getElementById("sliderBox");
     const player = document.getElementById("videoPlayer");
 
-    let adShown = false;
-
     function playVideoWithAd(url) {
-      if (!adShown) {
-        // প্রথম ক্লিকে বিজ্ঞাপন লিঙ্ক নতুন ট্যাবে খুলবে
-        window.open('https://www.profitableratecpm.com/hdkza3qzv?key=a7dccf049cbf829f60f8197705b9fc5c', '_blank');
-        adShown = true;
-        return; // ভিডিও চালাবে না
-      }
-      sliderBox.classList.add("hidden");
-      videoBox.classList.remove("hidden");
-      player.src = url;
-      player.load();
-      player.play();
-    }
+  sliderBox.classList.add("hidden");
+  videoBox.classList.remove("hidden");
+  player.src = url;
+  player.load();
+  player.play();
+}
 
     player.addEventListener("ended", () => {
       videoBox.classList.add("hidden");
